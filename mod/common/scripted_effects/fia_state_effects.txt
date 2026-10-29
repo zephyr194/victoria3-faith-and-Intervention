@@ -1,0 +1,234 @@
+﻿# State scope throughout this file.
+fia_clear_case = {
+    remove_modifier = fia_local_repression
+    remove_modifier = fia_local_guarantees
+    remove_variable = fia_tension
+    remove_variable = fia_faith
+    remove_variable = fia_case_owner
+    remove_variable = fia_incident
+    remove_variable = fia_conciliation
+    remove_variable = fia_repression
+    remove_variable = fia_accord_months
+    remove_variable = fia_patron
+    remove_variable = fia_case_cooldown
+    remove_variable = fia_offer_cooldown
+}
+fia_seed_case = {
+    ordered_scope_pop = {
+        limit = { fia_eligible_pop = yes }
+        order_by = total_size
+        max = 1
+        save_scope_as = fia_seed
+    }
+    if = {
+        limit = { exists = scope:fia_seed }
+        set_variable = { name = fia_faith value = scope:fia_seed.religion }
+        if = {
+            limit = { fia_case_population_present = yes }
+            set_variable = { name = fia_tension value = 0 }
+            set_variable = { name = fia_case_owner value = owner }
+        }
+        else = { remove_variable = fia_faith }
+    }
+}
+fia_update_tension = {
+    if = {
+        limit = { has_variable = fia_accord_months }
+        change_variable = { name = fia_tension subtract = fia_accord_decay }
+    }
+    else_if = {
+        limit = { owner = { fia_restrictive_policy = no } }
+        change_variable = { name = fia_tension subtract = fia_reform_decay }
+    }
+    else_if = {
+        limit = { turmoil >= fia_turmoil_threshold }
+        change_variable = { name = fia_tension add = fia_restricted_growth }
+        if = {
+            limit = { any_scope_pop = { has_pop_religion = prev.var:fia_faith total_size >= fia_minimum_population standard_of_living < fia_low_sol } }
+            change_variable = { name = fia_tension add = fia_poverty_growth }
+        }
+    }
+    else = { change_variable = { name = fia_tension subtract = fia_calm_decay } }
+    if = {
+        limit = { has_variable = fia_conciliation }
+        change_variable = { name = fia_tension subtract = fia_conciliation_decay }
+    }
+    if = {
+        limit = { has_variable = fia_repression }
+        change_variable = { name = fia_tension add = fia_repression_growth }
+    }
+    clamp_variable = { name = fia_tension min = 0 max = fia_maximum_tension }
+}
+fia_conciliate = {
+    change_variable = { name = fia_tension subtract = 15 }
+    clamp_variable = { name = fia_tension min = 0 max = fia_maximum_tension }
+    set_variable = { name = fia_conciliation value = 1 days = 365 }
+    remove_variable = fia_repression
+    remove_modifier = fia_local_repression
+    owner = { add_modifier = { name = fia_mediation_cost months = 12 } }
+}
+fia_repress = {
+    if = { limit = { has_variable = fia_accord_months } fia_breach_accord = yes }
+    change_variable = { name = fia_tension add = 10 }
+    clamp_variable = { name = fia_tension min = 0 max = fia_maximum_tension }
+    set_variable = { name = fia_incident value = 1 days = 1825 }
+    set_variable = { name = fia_repression value = 1 days = 365 }
+    remove_variable = fia_conciliation
+    add_modifier = { name = fia_local_repression months = 12 }
+    add_radicals_in_state = { religion = var:fia_faith value = 0.02 }
+}
+fia_begin_accord = {
+    # Idempotent: a second enforcement cannot restart the timer or farm rewards.
+    if = {
+        limit = { NOT = { has_variable = fia_accord_months } }
+        set_variable = { name = fia_accord_months value = 0 }
+        remove_variable = fia_repression
+        remove_modifier = fia_local_repression
+        add_modifier = { name = fia_local_guarantees }
+        owner = { add_modifier = { name = fia_host_concessions months = 12 } }
+        if = {
+            limit = { exists = var:fia_patron }
+            var:fia_patron = {
+                set_variable = { name = fia_on_accord value = 1 }
+                remove_variable = fia_authorized
+                remove_variable = fia_play_started
+                remove_variable = fia_mission_age
+                add_modifier = { name = fia_monitoring_cost }
+            }
+        }
+    }
+}
+fia_finish_accord = {
+    remove_variable = fia_accord_months
+    remove_modifier = fia_local_guarantees
+    remove_variable = fia_incident
+    set_variable = { name = fia_case_cooldown value = 1 days = 1825 }
+    if = {
+        limit = { exists = var:fia_patron }
+        var:fia_patron = {
+            add_modifier = { name = fia_diplomatic_credit months = 24 }
+            trigger_event = { id = fia.6 popup = yes }
+            fia_clear_mission = yes
+        }
+    }
+    remove_variable = fia_patron
+}
+fia_breach_accord = {
+    remove_variable = fia_accord_months
+    remove_modifier = fia_local_guarantees
+    set_variable = { name = fia_tension value = 80 }
+    set_variable = { name = fia_incident value = 1 days = 1825 }
+    if = {
+        limit = { exists = var:fia_patron }
+        var:fia_patron = {
+            remove_variable = fia_on_accord
+            remove_modifier = fia_monitoring_cost
+            set_variable = { name = fia_authorized value = 1 days = 365 }
+            set_variable = { name = fia_mission_age value = 0 }
+            trigger_event = { id = fia.5 popup = yes }
+        }
+    }
+}
+fia_offer_patronage = {
+    save_scope_as = fia_case
+    ordered_country = {
+        limit = { fia_can_be_patron = yes }
+        order_by = prestige
+        max = 1
+        save_scope_as = fia_new_patron
+        set_variable = { name = fia_mission_state value = scope:fia_case }
+        set_variable = { name = fia_mission_host value = scope:fia_case.owner }
+        set_variable = { name = fia_mission_age value = 0 }
+        add_journal_entry = { type = je_fia_intervention }
+        scope:fia_case = { set_variable = { name = fia_patron value = scope:fia_new_patron } }
+        trigger_event = { id = fia.2 popup = yes }
+    }
+    set_variable = { name = fia_offer_cooldown value = 1 days = 365 }
+}
+fia_monthly_state = {
+    # A destroyed or withdrawn protector must not permanently reserve a case.
+    if = {
+        limit = {
+            has_variable = fia_patron
+            OR = {
+                NOT = { exists = var:fia_patron }
+                NOT = { var:fia_patron = { has_variable = fia_mission_state var:fia_mission_state = prev } }
+            }
+        }
+        remove_variable = fia_patron
+    }
+    # State ownership transfers invalidate all old state bindings and benefits.
+    if = {
+        limit = { has_variable = fia_case_owner NOT = { var:fia_case_owner = owner } }
+        fia_clear_case = yes
+    }
+    if = {
+        limit = { NOT = { has_variable = fia_tension } fia_new_case_possible = yes }
+        fia_seed_case = yes
+    }
+    if = {
+        limit = { has_variable = fia_tension }
+        if = {
+            limit = {
+                fia_case_population_present = no
+                NOT = { has_variable = fia_patron }
+                NOT = { has_variable = fia_accord_months }
+            }
+            fia_clear_case = yes
+        }
+        else = {
+            fia_update_tension = yes
+            if = {
+                limit = { has_variable = fia_accord_months }
+                change_variable = { name = fia_accord_months add = 1 }
+                if = {
+                    limit = {
+                        OR = {
+                            var:fia_accord_months = 12
+                            var:fia_accord_months = 24
+                            var:fia_accord_months = 36
+                            var:fia_accord_months = 48
+                            var:fia_accord_months = 60
+                        }
+                    }
+                    add_radicals_in_state = { religion = var:fia_faith value = -0.01 }
+                }
+                if = {
+                    limit = { var:fia_accord_months >= fia_accord_duration }
+                    fia_finish_accord = yes
+                }
+            }
+            if = {
+                limit = {
+                    var:fia_tension >= fia_incident_threshold
+                    NOT = { has_variable = fia_accord_months }
+                    owner = { NOT = { has_variable = fia_domestic_cooldown } }
+                }
+                save_scope_as = fia_domestic_state
+                owner = {
+                    set_variable = { name = fia_domestic_state value = scope:fia_domestic_state }
+                    set_variable = { name = fia_domestic_cooldown value = 1 days = 365 }
+                    trigger_event = { id = fia.1 popup = yes }
+                }
+            }
+            if = {
+                limit = {
+                    var:fia_tension >= fia_crisis_threshold
+                    NOT = { has_variable = fia_incident }
+                }
+                # Persistent tensions produce a documented incident even if the
+                # player previously chose investigation rather than repression.
+                set_variable = { name = fia_incident value = 1 days = 1825 }
+                owner = { trigger_event = { id = fia.7 popup = yes } }
+            }
+            if = {
+                limit = {
+                    fia_live_crisis = yes
+                    NOT = { has_variable = fia_patron }
+                    NOT = { has_variable = fia_offer_cooldown }
+                }
+                fia_offer_patronage = yes
+            }
+        }
+    }
+}

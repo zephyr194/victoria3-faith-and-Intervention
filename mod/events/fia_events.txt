@@ -1,0 +1,133 @@
+﻿namespace = fia
+
+fia.1 = {
+    type = country_event
+    placement = root
+    title = fia.1.t
+    desc = fia.1.d
+    flavor = fia.1.f
+    duration = 30
+    trigger = {
+        exists = var:fia_domestic_state
+        var:fia_domestic_state = { owner = root has_variable = fia_tension NOT = { has_variable = fia_accord_months } }
+    }
+    immediate = { var:fia_domestic_state = { save_scope_as = fia_event_state } }
+    cancellation_trigger = {
+        OR = {
+            NOT = { exists = scope:fia_event_state }
+            NOT = { scope:fia_event_state = { owner = root has_variable = fia_tension NOT = { has_variable = fia_accord_months } } }
+        }
+    }
+    option = {
+        name = fia.1.a
+        default_option = yes
+        scope:fia_event_state = { fia_conciliate = yes }
+        ai_chance = { base = 40 }
+    }
+    option = {
+        name = fia.1.b
+        scope:fia_event_state = {
+            change_variable = { name = fia_tension subtract = 5 }
+            clamp_variable = { name = fia_tension min = 0 max = fia_maximum_tension }
+        }
+        add_modifier = { name = fia_mediation_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.1.c
+        scope:fia_event_state = { fia_repress = yes }
+        ai_chance = { base = 25 }
+    }
+}
+fia.2 = {
+    type = country_event
+    placement = root
+    title = fia.2.t
+    desc = fia.2.d
+    flavor = fia.2.f
+    duration = 30
+    trigger = { fia_mission_valid = yes }
+    immediate = {
+        var:fia_mission_state = { save_scope_as = fia_event_state }
+        var:fia_mission_host = { save_scope_as = fia_event_host }
+    }
+    cancellation_trigger = { fia_mission_valid = no }
+    option = {
+        name = fia.2.a
+        fia_send_request = yes
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.2.b
+        default_option = yes
+        fia_clear_mission = yes
+        ai_chance = { base = 70 }
+    }
+}
+fia.3 = {
+    type = country_event
+    placement = root
+    title = fia.3.t
+    desc = fia.3.d
+    flavor = fia.3.f
+    duration = 30
+    trigger = { fia_request_valid = yes }
+    immediate = {
+        var:fia_request_state = { save_scope_as = fia_event_state }
+        var:fia_request_from = { save_scope_as = fia_event_patron }
+    }
+    cancellation_trigger = {
+        OR = {
+            fia_request_valid = no
+            NOT = { var:fia_request_state = scope:fia_event_state }
+            NOT = { var:fia_request_from = scope:fia_event_patron }
+        }
+    }
+    option = { name = fia.3.a fia_accept_request = yes ai_chance = { base = 40 } }
+    option = { name = fia.3.b default_option = yes fia_reject_request = yes ai_chance = { base = 60 } }
+}
+fia.4 = {
+    type = country_event
+    placement = root
+    title = fia.4.t
+    desc = fia.4.d
+    flavor = fia.4.f
+    option = { name = fia.ack default_option = yes }
+}
+fia.5 = {
+    type = country_event
+    placement = root
+    title = fia.5.t
+    desc = fia.5.d
+    flavor = fia.5.f
+    option = { name = fia.ack default_option = yes }
+}
+fia.6 = {
+    type = country_event
+    placement = root
+    title = fia.6.t
+    desc = fia.6.d
+    flavor = fia.6.f
+    option = { name = fia.ack default_option = yes }
+}
+fia.7 = {
+    type = country_event
+    placement = root
+    title = fia.7.t
+    desc = fia.7.d
+    flavor = fia.7.f
+    option = { name = fia.ack default_option = yes }
+}
+fia.8 = {
+    type = country_event
+    placement = root
+    title = fia.8.t
+    desc = fia.8.d
+    flavor = fia.8.f
+    trigger = { fia_mission_valid = yes }
+    immediate = {
+        var:fia_mission_state = { save_scope_as = fia_event_state }
+        var:fia_mission_host = { save_scope_as = fia_event_host }
+    }
+    option = { name = fia.ack default_option = yes }
+}

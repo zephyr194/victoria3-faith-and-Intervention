@@ -1,0 +1,46 @@
+﻿fia_review_crisis = {
+    is_shown = { any_scope_state = { has_variable = fia_tension NOT = { has_variable = fia_accord_months } } }
+    possible = { NOT = { has_variable = fia_domestic_cooldown } }
+    when_taken = {
+        ordered_scope_state = {
+            limit = { has_variable = fia_tension NOT = { has_variable = fia_accord_months } }
+            order_by = var:fia_tension
+            max = 1
+            save_scope_as = fia_review_state
+        }
+        if = {
+            limit = { exists = scope:fia_review_state }
+            set_variable = { name = fia_domestic_state value = scope:fia_review_state }
+            set_variable = { name = fia_domestic_cooldown value = 1 days = 365 }
+            trigger_event = { id = fia.1 popup = yes }
+        }
+    }
+    ai_chance = { value = 0 }
+}
+fia_review_intervention = {
+    is_shown = { has_variable = fia_mission_state }
+    possible = { fia_can_escalate = yes }
+    when_taken = { trigger_event = { id = fia.8 popup = yes } }
+    ai_chance = { value = 0 }
+}
+fia_withdraw_protection = {
+    is_shown = { has_variable = fia_mission_state }
+    possible = {
+        NOT = { has_war_with = var:fia_mission_host }
+        fia_mission_has_play = no
+    }
+    when_taken = { fia_clear_mission = yes }
+    ai_chance = { value = 0 }
+}
+fia_revoke_guarantees = {
+    is_shown = { any_scope_state = { has_variable = fia_accord_months } }
+    possible = { is_at_war = no }
+    when_taken = {
+        every_scope_state = {
+            limit = { has_variable = fia_accord_months }
+            fia_breach_accord = yes
+        }
+        add_modifier = { name = fia_host_concessions months = 24 }
+    }
+    ai_chance = { value = 0 }
+}

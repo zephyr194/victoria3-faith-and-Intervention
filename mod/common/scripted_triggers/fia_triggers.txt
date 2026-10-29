@@ -1,0 +1,128 @@
+﻿# Country scope. Restriction is a policy proxy, NOT proof of religious persecution.
+fia_restrictive_policy = {
+    OR = {
+        has_law = law_type:law_state_religion
+        has_law = law_type:law_state_atheism
+    }
+}
+# Pop scope. A large, unaccepted, non-state-faith pop is required as a seed.
+fia_eligible_pop = {
+    has_state_religion = no
+    pop_acceptance < 60
+    total_size >= fia_minimum_population
+}
+# State scope. Existing cases retain a fixed faith; new ones use the largest seed pop.
+fia_new_case_possible = {
+    state_population >= fia_minimum_population
+    turmoil >= fia_turmoil_threshold
+    owner = {
+        fia_restrictive_policy = yes
+        NOT = { is_country_type = decentralized }
+    }
+    any_scope_pop = { fia_eligible_pop = yes }
+}
+fia_case_population_present = {
+    has_variable = fia_faith
+    religion_percent_state = {
+        target = var:fia_faith
+        value >= fia_minority_share
+    }
+}
+fia_live_crisis = {
+    has_variable = fia_tension
+    var:fia_tension >= fia_intervention_threshold
+    has_variable = fia_incident
+    fia_case_population_present = yes
+    NOT = { has_variable = fia_accord_months }
+    NOT = { has_variable = fia_case_cooldown }
+}
+# Country scope; fia_case is a saved state scope in invitation / selection contexts.
+fia_can_be_patron = {
+    is_country_alive = yes
+    is_subject = no
+    is_at_war = no
+    NOT = { is_country_type = decentralized }
+    prestige >= fia_minimum_patron_prestige
+    NOT = { has_variable = fia_mission_state }
+    NOT = { has_variable = fia_patron_cooldown }
+    has_variable = fia_fatigue
+    var:fia_fatigue < fia_fatigue_limit
+    NOT = { this = scope:fia_case.owner }
+    religion = scope:fia_case.var:fia_faith
+    has_interest_marker_in_region = scope:fia_case.region
+    NOT = { has_truce_with = scope:fia_case.owner }
+    NOT = { is_diplomatic_play_participant_with = scope:fia_case.owner }
+    scope:fia_case.owner = {
+        is_country_alive = yes
+        is_subject = no
+        is_at_war = no
+        NOT = { has_variable = fia_request_from }
+    }
+}
+# Mission actor scope; every cross-country action revalidates owner and reciprocal binding.
+fia_mission_valid = {
+    has_variable = fia_mission_state
+    has_variable = fia_mission_host
+    exists = var:fia_mission_state
+    exists = var:fia_mission_host
+    var:fia_mission_host = { is_country_alive = yes }
+    var:fia_mission_state = {
+        owner = prev.var:fia_mission_host
+        has_variable = fia_patron
+        var:fia_patron = prev
+    }
+}
+fia_can_escalate = {
+    fia_mission_valid = yes
+    has_variable = fia_authorized
+    NOT = { has_variable = fia_play_started }
+    NOT = { has_variable = fia_on_accord }
+    is_subject = no
+    is_at_war = no
+    var:fia_fatigue < fia_fatigue_limit
+    NOT = { has_truce_with = var:fia_mission_host }
+    NOT = { is_diplomatic_play_participant_with = var:fia_mission_host }
+    var:fia_mission_host = { is_subject = no is_at_war = no }
+    religion = var:fia_mission_state.var:fia_faith
+    has_interest_marker_in_region = var:fia_mission_state.region
+    var:fia_mission_state = {
+        fia_live_crisis = yes
+        owner = { fia_restrictive_policy = yes }
+    }
+}
+# Native play selection supplies the target country before a state is picked.
+fia_authorizes_target = {
+    root = {
+        fia_can_escalate = yes
+        var:fia_mission_host = scope:target_country
+    }
+}
+# War-goal selection additionally supplies the target state.
+fia_authorizes_goal = {
+    fia_authorizes_target = yes
+    root = { var:fia_mission_state = scope:target_state }
+}
+# Host country scope.
+fia_request_valid = {
+    has_variable = fia_request_from
+    has_variable = fia_request_state
+    exists = var:fia_request_from
+    exists = var:fia_request_state
+    var:fia_request_from = {
+        is_country_alive = yes
+        fia_mission_valid = yes
+        var:fia_mission_host = prev
+        var:fia_mission_state = prev.var:fia_request_state
+    }
+    var:fia_request_state = {
+        owner = prev
+        NOT = { has_variable = fia_accord_months }
+    }
+}
+fia_mission_has_play = {
+    any_diplomatic_play = {
+        is_diplomatic_play_type = dp_fia_protect_faith
+        initiator_is = prev
+        target_is = prev.var:fia_mission_host
+    }
+}

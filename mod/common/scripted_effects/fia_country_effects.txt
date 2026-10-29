@@ -1,0 +1,153 @@
+﻿# Country scope. Reciprocal links prevent stale events affecting another case.
+fia_clear_request = {
+    remove_variable = fia_request_from
+    remove_variable = fia_request_state
+    remove_variable = fia_request_age
+}
+fia_clear_mission = {
+    save_scope_as = fia_departing_patron
+    if = {
+        limit = { exists = var:fia_mission_host }
+        var:fia_mission_host = {
+            if = {
+                limit = { has_variable = fia_request_from var:fia_request_from = scope:fia_departing_patron }
+                fia_clear_request = yes
+            }
+        }
+    }
+    if = {
+        limit = { exists = var:fia_mission_state }
+        var:fia_mission_state = {
+            if = {
+                limit = { has_variable = fia_patron var:fia_patron = scope:fia_departing_patron }
+                remove_variable = fia_patron
+                # A negotiated local guarantee survives the protector's withdrawal.
+            }
+        }
+    }
+    remove_variable = fia_mission_state
+    remove_variable = fia_mission_host
+    remove_variable = fia_mission_age
+    remove_variable = fia_authorized
+    remove_variable = fia_play_started
+    remove_variable = fia_war_seen
+    remove_variable = fia_on_accord
+    remove_modifier = fia_monitoring_cost
+    set_variable = { name = fia_patron_cooldown value = 1 days = 1095 }
+}
+fia_send_request = {
+    if = {
+        limit = {
+            fia_mission_valid = yes
+            var:fia_mission_host = { NOT = { has_variable = fia_request_from } }
+        }
+        save_scope_as = fia_requester
+        var:fia_mission_state = { save_scope_as = fia_requested_state }
+        var:fia_mission_host = {
+            set_variable = { name = fia_request_from value = scope:fia_requester }
+            set_variable = { name = fia_request_state value = scope:fia_requested_state }
+            set_variable = { name = fia_request_age value = 0 }
+            trigger_event = { id = fia.3 popup = yes }
+        }
+    }
+    else = { fia_clear_mission = yes }
+}
+fia_accept_request = {
+    if = {
+        limit = { fia_request_valid = yes }
+        var:fia_request_state = { fia_begin_accord = yes }
+        var:fia_request_from = { trigger_event = { id = fia.4 popup = yes } }
+    }
+    fia_clear_request = yes
+}
+fia_reject_request = {
+    if = {
+        limit = { fia_request_valid = yes }
+        var:fia_request_from = {
+            set_variable = { name = fia_authorized value = 1 days = 365 }
+            set_variable = { name = fia_mission_age value = 0 }
+            trigger_event = { id = fia.5 popup = yes }
+        }
+    }
+    fia_clear_request = yes
+}
+fia_monthly_country = {
+    if = {
+        limit = { NOT = { has_variable = fia_fatigue } }
+        set_variable = { name = fia_fatigue value = 0 }
+    }
+    if = {
+        limit = { NOT = { has_journal_entry = je_fia_overview } }
+        add_journal_entry = { type = je_fia_overview }
+    }
+    every_scope_state = { fia_monthly_state = yes }
+    set_variable = { name = fia_max_tension value = 0 }
+    set_variable = { name = fia_case_count value = 0 }
+    every_scope_state = {
+        limit = { has_variable = fia_tension }
+        owner = { change_variable = { name = fia_case_count add = 1 } }
+        if = {
+            limit = { var:fia_tension > owner.var:fia_max_tension }
+            owner = { set_variable = { name = fia_max_tension value = prev.var:fia_tension } }
+        }
+    }
+    # Only foreign religious intervention increases this mod's fatigue.
+    if = {
+        limit = {
+            fia_mission_valid = yes
+            has_war_with = var:fia_mission_host
+        }
+        set_variable = { name = fia_war_seen value = 1 }
+        change_variable = { name = fia_fatigue add = fia_fatigue_growth }
+    }
+    else = { change_variable = { name = fia_fatigue subtract = fia_fatigue_decay } }
+    clamp_variable = { name = fia_fatigue min = 0 max = 100 }
+    if = {
+        limit = { has_variable = fia_mission_state }
+        if = {
+            limit = { fia_mission_valid = no }
+            fia_clear_mission = yes
+        }
+        else_if = {
+            limit = { NOT = { has_variable = fia_on_accord } }
+            if = {
+                limit = { fia_mission_has_play = yes }
+                set_variable = { name = fia_play_started value = 1 }
+            }
+            else_if = {
+                limit = {
+                    NOT = { has_war_with = var:fia_mission_host }
+                    OR = { has_variable = fia_play_started has_variable = fia_war_seen }
+                }
+                # Backdown/white peace/defeat never grants a victory reward.
+                fia_clear_mission = yes
+            }
+            else = {
+                change_variable = { name = fia_mission_age add = 1 }
+                if = {
+                    limit = {
+                        OR = {
+                            var:fia_mission_age >= 24
+                            var:fia_mission_state = {
+                                var:fia_tension < fia_crisis_threshold
+                                owner = { fia_restrictive_policy = no }
+                            }
+                        }
+                    }
+                    fia_clear_mission = yes
+                }
+            }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_request_from }
+        if = {
+            limit = { fia_request_valid = no }
+            fia_clear_request = yes
+        }
+        else = {
+            change_variable = { name = fia_request_age add = 1 }
+            if = { limit = { var:fia_request_age >= 3 } fia_reject_request = yes }
+        }
+    }
+}

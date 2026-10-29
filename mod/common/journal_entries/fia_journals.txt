@@ -1,0 +1,18 @@
+﻿je_fia_overview = {
+    icon = "gfx/interface/icons/event_icons/event_default.dds"
+    weight = 50
+    transferable = no
+    can_revolution_inherit = yes
+    # Permanent overview, activated lazily on the first monthly pulse.
+    complete = { always = no }
+    status_desc = je_fia_overview_status
+}
+je_fia_intervention = {
+    icon = "gfx/interface/icons/event_icons/event_default.dds"
+    weight = 200
+    should_be_pinned_by_default = yes
+    transferable = no
+    can_revolution_inherit = no
+    invalid = { NOT = { has_variable = fia_mission_state } }
+    status_desc = je_fia_intervention_status
+}

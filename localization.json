@@ -1,0 +1,262 @@
+{
+  "fia.ack": {
+    "simp_chinese": "知悉。",
+    "english": "Understood."
+  },
+  "fia.1.t": {
+    "simp_chinese": "地方信仰争端",
+    "english": "A Local Religious Dispute"
+  },
+  "fia.1.d": {
+    "simp_chinese": "[SCOPE.sState('fia_event_state').GetName]的宗教社群要求政府回应。当地紧张度：[SCOPE.sState('fia_event_state').MakeScope.Var('fia_tension').GetValue|0]/100。",
+    "english": "Religious communities in [SCOPE.sState('fia_event_state').GetName] demand a response. Local tension: [SCOPE.sState('fia_event_state').MakeScope.Var('fia_tension').GetValue|0]/100."
+  },
+  "fia.1.f": {
+    "simp_chinese": "矛盾来自政策限制与地方困境；不同信仰本身不构成罪责。",
+    "english": "Policy restrictions and local hardship drive the dispute; difference of faith alone is no wrongdoing."
+  },
+  "fia.1.a": {
+    "simp_chinese": "调解：紧张度−15，持续缓和一年；承担行政成本。",
+    "english": "Mediate: −15 tension, one year of conciliation; pay an administrative cost."
+  },
+  "fia.1.b": {
+    "simp_chinese": "调查：紧张度−5，承担半年的行政成本。",
+    "english": "Investigate: −5 tension; pay six months of administrative costs."
+  },
+  "fia.1.c": {
+    "simp_chinese": "镇压：紧张度+10，产生重大事件并增加激进者。",
+    "english": "Repress: +10 tension, a documented incident and more radicals."
+  },
+  "fia.2.t": {
+    "simp_chinese": "同教社群请求保护",
+    "english": "A Petition for Religious Protection"
+  },
+  "fia.2.d": {
+    "simp_chinese": "[SCOPE.sCountry('fia_event_host').GetName]境内[SCOPE.sState('fia_event_state').GetName]的同教社群请求介入。我们可以先提出五年地方保障要求。",
+    "english": "A community sharing our state faith in [SCOPE.sState('fia_event_state').GetName], [SCOPE.sCountry('fia_event_host').GetName], requests intervention. We may first seek a five-year local guarantee."
+  },
+  "fia.2.f": {
+    "simp_chinese": "保护意味着承诺；交涉失败并不自动宣战。",
+    "english": "Protection creates obligations. Failed talks do not automatically mean war."
+  },
+  "fia.2.a": {
+    "simp_chinese": "提出保障要求，等待对方回应。",
+    "english": "Request guarantees and await a response."
+  },
+  "fia.2.b": {
+    "simp_chinese": "不承担这项承诺，进入三年干涉冷却。",
+    "english": "Decline this commitment; take a three-year intervention cooldown."
+  },
+  "fia.3.t": {
+    "simp_chinese": "外国要求宗教保障",
+    "english": "A Foreign Request for Guarantees"
+  },
+  "fia.3.d": {
+    "simp_chinese": "[SCOPE.sCountry('fia_event_patron').GetName]要求保障[SCOPE.sState('fia_event_state').GetName]的宗教活动，停止当地镇压并接受五年监督。",
+    "english": "[SCOPE.sCountry('fia_event_patron').GetName] requests safeguards for religious activity in [SCOPE.sState('fia_event_state').GetName], an end to local repression and five years of monitoring."
+  },
+  "fia.3.f": {
+    "simp_chinese": "这是一项地方行政安排，不会改变国教、全国法律或人口信仰。拒绝将给予对方一年内提出宗教保障外交博弈的理由。",
+    "english": "This is a local administrative arrangement. It changes neither the state faith, national laws nor anyone’s religion. Refusal grants a one-year opportunity to raise a religious-guarantee diplomatic play."
+  },
+  "fia.3.a": {
+    "simp_chinese": "接受五年保障，承担地方成本及教权派反弹。",
+    "english": "Accept five-year guarantees, local costs and a Devout backlash."
+  },
+  "fia.3.b": {
+    "simp_chinese": "拒绝外国监督。",
+    "english": "Reject foreign supervision."
+  },
+  "fia.4.t": {
+    "simp_chinese": "宗教保障达成",
+    "english": "Religious Guarantees Agreed"
+  },
+  "fia.4.d": {
+    "simp_chinese": "地方镇压停止，五年履约期开始。保护国持续承担50外交影响力与25行政力成本；地方承担5%税收损失并获得0.5生活水平。",
+    "english": "Local repression ends and a five-year compliance period begins. The protector pays 50 Influence and 25 Bureaucracy; the locality loses 5% tax collection and gains 0.5 Standard of Living."
+  },
+  "fia.4.f": {
+    "simp_chinese": "没有人口被立即改宗，法律接纳程度也不会被这份行政安排直接改写。",
+    "english": "No population is instantly converted, and this administrative arrangement does not directly alter legal acceptance."
+  },
+  "fia.5.t": {
+    "simp_chinese": "交涉破裂或保障被撤销",
+    "english": "Guarantees Refused or Revoked"
+  },
+  "fia.5.d": {
+    "simp_chinese": "一年内可以提出“保障宗教权利”外交博弈。必须仍满足地区利益、同教联系、有效危机及原版外交条件；现有停战协定不会被绕过。",
+    "english": "A religious-guarantee diplomatic play may be raised for one year, provided regional interest, a shared faith, a live crisis and vanilla diplomatic conditions remain valid. Existing truces are respected."
+  },
+  "fia.5.f": {
+    "simp_chinese": "我们可以通过外交视图选择目标，也可以撤回承诺。战争不会自动开始。",
+    "english": "Use the diplomatic view to select the target, or withdraw the commitment. War does not begin automatically."
+  },
+  "fia.6.t": {
+    "simp_chinese": "五年和约履行完毕",
+    "english": "Five Years of Compliance"
+  },
+  "fia.6.d": {
+    "simp_chinese": "地方保障已履行60个月。监督成本结束，保护国获得两年外交信誉修正，并进入三年干涉冷却。",
+    "english": "Local guarantees have lasted 60 months. Monitoring costs end; the protector receives two years of diplomatic credit and a three-year intervention cooldown."
+  },
+  "fia.6.f": {
+    "simp_chinese": "条约的价值在履约中体现。",
+    "english": "The value of a treaty lies in its execution."
+  },
+  "fia.7.t": {
+    "simp_chinese": "宗教矛盾成为公开危机",
+    "english": "A Religious Crisis Becomes Public"
+  },
+  "fia.7.d": {
+    "simp_chinese": "某地区紧张度达到50，持续矛盾已形成重大事件记录。达到70后，具备同教联系和当地利益的外国可能收到保护请求。",
+    "english": "A locality has reached 50 tension. Persistent unrest now constitutes a documented incident. At 70, a foreign country sharing the community’s faith and holding a regional interest may receive a protection petition."
+  },
+  "fia.7.f": {
+    "simp_chinese": "及时调解或改善政教政策仍然可以缓和矛盾。",
+    "english": "Mediation or reform of religious policy can still defuse the dispute."
+  },
+  "fia.8.t": {
+    "simp_chinese": "审议宗教干涉",
+    "english": "Review Religious Intervention"
+  },
+  "fia.8.d": {
+    "simp_chinese": "目标：[SCOPE.sCountry('fia_event_host').GetName]；地区：[SCOPE.sState('fia_event_state').GetName]。在外交视图的外交博弈列表中选择“保障宗教权利”，再选择该地区。此入口由原版检查外交限制和战争代价。",
+    "english": "Target: [SCOPE.sCountry('fia_event_host').GetName]; locality: [SCOPE.sState('fia_event_state').GetName]. In the diplomatic lens, choose Protect Religious Rights and select this state. The native interface checks diplomatic restrictions and war costs."
+  },
+  "fia.8.f": {
+    "simp_chinese": "初始目标花费5恶名、20调动筹码，需控制目标地区；胜利只执行地方保障，不转移领土。",
+    "english": "The starting goal costs 5 Infamy and 20 Maneuvers and requires control of the target state. Enforcement grants local guarantees without transferring territory."
+  },
+  "fia_review_crisis": {
+    "simp_chinese": "处理国内宗教争端",
+    "english": "Review Domestic Religious Disputes"
+  },
+  "fia_review_intervention": {
+    "simp_chinese": "审议宗教干涉",
+    "english": "Review Religious Intervention"
+  },
+  "fia_withdraw_protection": {
+    "simp_chinese": "撤回宗教保护承诺",
+    "english": "Withdraw Religious Protection"
+  },
+  "fia_revoke_guarantees": {
+    "simp_chinese": "撤销所有地方宗教保障",
+    "english": "Revoke All Local Religious Guarantees"
+  },
+  "fia_review_crisis_desc": {
+    "simp_chinese": "选择本国紧张度最高且未处于保障期的地区。每年最多处理一次。",
+    "english": "Review the most tense unprotected locality. Available once a year."
+  },
+  "fia_review_intervention_desc": {
+    "simp_chinese": "查看当前目标与外交博弈操作说明。本决议不会直接宣战。",
+    "english": "Review the current target and instructions for the native diplomatic play. This decision does not declare war."
+  },
+  "fia_withdraw_protection_desc": {
+    "simp_chinese": "撤回当前承诺并停止监督成本。已生效的地方保障继续履行，且不会给予保护国完成奖励。",
+    "english": "Withdraw the commitment and end monitoring costs. Existing local guarantees continue, without awarding completion credit to the former protector."
+  },
+  "fia_revoke_guarantees_desc": {
+    "simp_chinese": "同时撤销本国所有有效保障，紧张度设为80；仍存在的保护国得到一年交涉理由。原版停战协定仍有效。",
+    "english": "Revoke every active guarantee, set local tension to 80, and grant surviving protectors a one-year reason to intervene. Vanilla truces still apply."
+  },
+  "fia_review_crisis_tooltip": {
+    "simp_chinese": "处理国内宗教争端",
+    "english": "Review Domestic Religious Disputes"
+  },
+  "fia_review_intervention_tooltip": {
+    "simp_chinese": "审议宗教干涉",
+    "english": "Review Religious Intervention"
+  },
+  "fia_withdraw_protection_tooltip": {
+    "simp_chinese": "撤回宗教保护承诺",
+    "english": "Withdraw Religious Protection"
+  },
+  "fia_revoke_guarantees_tooltip": {
+    "simp_chinese": "撤销所有地方宗教保障",
+    "english": "Revoke All Local Religious Guarantees"
+  },
+  "je_fia_overview": {
+    "simp_chinese": "信仰与干涉",
+    "english": "Faith and Intervention"
+  },
+  "je_fia_overview_reason": {
+    "simp_chinese": "宗教限制与地方动乱可能形成危机。25紧张度触发国内处置，50形成重大事件，70允许外国提出保护请求。查看决议以处置争端。",
+    "english": "Religious restrictions combined with local turmoil can create a crisis: domestic response at 25 tension, a major incident at 50, foreign protection requests at 70. Use Decisions to respond."
+  },
+  "je_fia_overview_status": {
+    "simp_chinese": "受关注地区：[JournalEntry.GetCountry.MakeScope.Var('fia_case_count').GetValue|0]；最高紧张度：[JournalEntry.GetCountry.MakeScope.Var('fia_max_tension').GetValue|0]/100；宗教干涉疲劳：[JournalEntry.GetCountry.MakeScope.Var('fia_fatigue').GetValue|0]/100。",
+    "english": "Tracked localities: [JournalEntry.GetCountry.MakeScope.Var('fia_case_count').GetValue|0]; maximum tension: [JournalEntry.GetCountry.MakeScope.Var('fia_max_tension').GetValue|0]/100; intervention fatigue: [JournalEntry.GetCountry.MakeScope.Var('fia_fatigue').GetValue|0]/100."
+  },
+  "je_fia_intervention": {
+    "simp_chinese": "宗教保护承诺",
+    "english": "A Religious Protection Commitment"
+  },
+  "je_fia_intervention_reason": {
+    "simp_chinese": "先提出地方保障要求；遭拒后可在一年内通过外交视图提出保障宗教权利。达成保障后承担五年监督成本。可以在没有进行中的博弈或战争时撤回。",
+    "english": "Seek local guarantees first. Refusal opens a one-year window to raise Protect Religious Rights in the diplomatic lens. An agreement requires five years of monitoring. Withdraw when no related play or war is in progress."
+  },
+  "je_fia_intervention_status": {
+    "simp_chinese": "目标地区紧张度：[JournalEntry.GetCountry.MakeScope.ScriptValue('fia_display_tension')|0]/100；护教压力以该紧张度表示。履约：[JournalEntry.GetCountry.MakeScope.ScriptValue('fia_display_accord_months')|0]/60个月。",
+    "english": "Local tension / protection pressure: [JournalEntry.GetCountry.MakeScope.ScriptValue('fia_display_tension')|0]/100. Compliance: [JournalEntry.GetCountry.MakeScope.ScriptValue('fia_display_accord_months')|0]/60 months."
+  },
+  "fia_local_repression": {
+    "simp_chinese": "宗教镇压的地方代价",
+    "english": "Local Costs of Religious Repression"
+  },
+  "fia_local_guarantees": {
+    "simp_chinese": "地方宗教保障",
+    "english": "Local Religious Guarantees"
+  },
+  "fia_mediation_cost": {
+    "simp_chinese": "宗教事务调查与调解",
+    "english": "Religious Investigation and Mediation"
+  },
+  "fia_monitoring_cost": {
+    "simp_chinese": "宗教保障监督",
+    "english": "Monitoring Religious Guarantees"
+  },
+  "fia_host_concessions": {
+    "simp_chinese": "宗教妥协引发反弹",
+    "english": "Backlash against Religious Concessions"
+  },
+  "fia_diplomatic_credit": {
+    "simp_chinese": "宗教和约履约信誉",
+    "english": "Religious Treaty Credibility"
+  },
+  "dp_fia_protect_faith": {
+    "simp_chinese": "保障宗教权利",
+    "english": "Protect Religious Rights"
+  },
+  "fia_religious_guarantees": {
+    "simp_chinese": "地方宗教保障",
+    "english": "Local Religious Guarantees"
+  },
+  "dp_fia_protect_faith_desc": {
+    "simp_chinese": "通过外交博弈要求目标地区停止宗教镇压并接受五年地方保障。",
+    "english": "Demand an end to religious repression and five years of local guarantees through a diplomatic play."
+  },
+  "fia_religious_guarantees_desc": {
+    "simp_chinese": "停止目标地区的镇压并执行五年地方保障；不转移领土、不改变全国法律、不立即改宗人口。",
+    "english": "End repression in the target state and enforce five years of local guarantees. No land transfer, national law change or instant population conversion."
+  },
+  "war_goal_fia_religious_guarantees": {
+    "simp_chinese": "保障宗教权利",
+    "english": "Protect Religious Rights"
+  },
+  "war_goal_fia_religious_guarantees_desc": {
+    "simp_chinese": "停止目标地区的镇压并执行五年地方保障；不转移领土、不改变全国法律、不立即改宗人口。",
+    "english": "End repression in the target state and enforce five years of local guarantees. No land transfer, national law change or instant population conversion."
+  },
+  "war_goal_fia_religious_guarantees_type_name": {
+    "simp_chinese": "保障宗教权利",
+    "english": "Protect Religious Rights"
+  },
+  "war_goal_fia_religious_guarantees_type_desc": {
+    "simp_chinese": "停止目标地区的镇压并执行五年地方保障；不转移领土、不改变全国法律、不立即改宗人口。",
+    "english": "End repression in the target state and enforce five years of local guarantees. No land transfer, national law change or instant population conversion."
+  },
+  "war_goal_fia_religious_guarantees_sway_desc": {
+    "simp_chinese": "停止目标地区的镇压并执行五年地方保障；不转移领土、不改变全国法律、不立即改宗人口。",
+    "english": "End repression in the target state and enforce five years of local guarantees. No land transfer, national law change or instant population conversion."
+  }
+}

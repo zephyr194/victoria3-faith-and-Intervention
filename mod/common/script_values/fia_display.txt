@@ -1,0 +1,8 @@
+﻿fia_display_tension = {
+    value = 0
+    if = { limit = { has_variable = fia_mission_state exists = var:fia_mission_state } value = var:fia_mission_state.var:fia_tension }
+}
+fia_display_accord_months = {
+    value = 0
+    if = { limit = { has_variable = fia_on_accord exists = var:fia_mission_state } value = var:fia_mission_state.var:fia_accord_months }
+}

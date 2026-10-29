@@ -1,0 +1,6 @@
+﻿# Append a child on-action; do not overwrite vanilla pulse effects.
+on_monthly_pulse_country = { on_actions = { fia_monthly_pulse } }
+fia_monthly_pulse = {
+    trigger = { NOT = { is_country_type = decentralized } }
+    effect = { fia_monthly_country = yes }
+}

@@ -1,0 +1,15 @@
+﻿fia_local_repression = {
+    state_tax_collection_mult = -0.10
+    state_migration_pull_mult = -0.10
+}
+fia_local_guarantees = {
+    state_tax_collection_mult = -0.05
+    state_standard_of_living_add = 0.5
+}
+fia_mediation_cost = { country_bureaucracy_add = -25 }
+fia_monitoring_cost = {
+    country_influence_add = -50
+    country_bureaucracy_add = -25
+}
+fia_host_concessions = { interest_group_ig_devout_approval_add = -2 }
+fia_diplomatic_credit = { country_prestige_add = 10 }

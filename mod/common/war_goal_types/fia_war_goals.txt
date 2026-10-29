@@ -1,0 +1,39 @@
+﻿fia_religious_guarantees = {
+    icon = "gfx/interface/icons/war_goals/humiliation.dds"
+    kind = custom
+    settings = {
+        require_target_be_part_of_war
+        requires_interest
+        validate_target_not_treaty_port
+        validate_conflicts_war_goals_holder
+        conflicts_with_annex_state
+        conflicts_with_country_creation
+    }
+    execution_priority = 80
+    contestion_type = control_target_state
+    target_type = state
+    possible = { fia_authorizes_goal = yes }
+    # Do NOT re-read timed casus belli, fatigue, tension, policy or pop share here:
+    # they can change mid-war without deleting the accepted goal.
+    valid = {
+        scope:target_state = { owner = scope:target_country }
+        root = {
+            exists = var:fia_mission_state
+            var:fia_mission_state = scope:target_state
+            var:fia_mission_host = scope:target_country
+        }
+    }
+    maneuvers = { value = fia_war_goal_maneuvers }
+    infamy = { value = fia_war_goal_infamy }
+    on_enforced = {
+        # ROOT=holder, even when creator_country has a different UI context.
+        scope:target_state = {
+            if = {
+                limit = { owner = scope:target_country }
+                set_variable = { name = fia_patron value = root }
+                fia_begin_accord = yes
+            }
+        }
+    }
+    ai = { is_significant_demand = yes }
+}
