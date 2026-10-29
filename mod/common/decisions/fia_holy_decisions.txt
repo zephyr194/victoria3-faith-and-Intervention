@@ -1,0 +1,271 @@
+﻿fia_holy_open = {
+    is_shown = { fia_holy_is_custodian = yes }
+    possible = { global_var:fia_holy_state = { has_variable = fia_holy_restricted } }
+    when_taken = { global_var:fia_holy_state = { remove_variable = fia_holy_restricted } }
+    ai_chance = { value = 10 }
+}
+fia_holy_restrict = {
+    is_shown = { fia_holy_is_custodian = yes }
+    possible = {
+        fia_restrictive_policy = yes
+        global_var:fia_holy_state = { NOT = { has_variable = fia_holy_restricted } }
+        NOT = { has_variable = fia_holy_policy_cooldown }
+    }
+    when_taken = {
+        global_var:fia_holy_state = { set_variable = { name = fia_holy_restricted value = 1 } }
+        set_variable = { name = fia_holy_policy_cooldown value = 1 days = fia_holy_reward_cap_days }
+    }
+    ai_chance = { value = 0 }
+}
+fia_holy_catholic_restraint = {
+    is_shown = { this = c:PAP religion = rel:catholic is_subject = no }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_catholic_authority
+        var:fia_holy_catholic_authority >= 25
+        NOT = { has_variable = fia_holy_catholic_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_catholic_call set_global_variable = { name = fia_holy_catholic_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_catholic_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_catholic_call = {
+    is_shown = { this = c:PAP religion = rel:catholic is_subject = no }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_catholic_authority
+        var:fia_holy_catholic_authority >= 50
+        NOT = { has_variable = fia_holy_catholic_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_catholic_call value = 1 days = 365 } change_variable = { name = fia_holy_catholic_authority subtract = 10 }
+        set_variable = { name = fia_holy_catholic_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_catholic_recognize = {
+    is_shown = { this = c:PAP religion = rel:catholic is_subject = no }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_catholic_recognized_epoch } global_var:fia_holy_catholic_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_catholic_authority
+        var:fia_holy_catholic_authority >= 25
+        NOT = { has_variable = fia_holy_catholic_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_catholic_call set_global_variable = { name = fia_holy_catholic_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_catholic_authority add = 5 }
+        set_variable = { name = fia_holy_catholic_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_protestant_restraint = {
+    is_shown = { fia_holy_protestant_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_protestant_authority
+        var:fia_holy_protestant_authority >= 25
+        NOT = { has_variable = fia_holy_protestant_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_protestant_call set_global_variable = { name = fia_holy_protestant_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_protestant_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_protestant_call = {
+    is_shown = { fia_holy_protestant_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_protestant_authority
+        var:fia_holy_protestant_authority >= 50
+        NOT = { has_variable = fia_holy_protestant_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_protestant_call value = 1 days = 365 } change_variable = { name = fia_holy_protestant_authority subtract = 10 }
+        set_variable = { name = fia_holy_protestant_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_protestant_recognize = {
+    is_shown = { fia_holy_protestant_voice = yes }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_protestant_recognized_epoch } global_var:fia_holy_protestant_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_protestant_authority
+        var:fia_holy_protestant_authority >= 25
+        NOT = { has_variable = fia_holy_protestant_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_protestant_call set_global_variable = { name = fia_holy_protestant_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_protestant_authority add = 5 }
+        set_variable = { name = fia_holy_protestant_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_orthodox_restraint = {
+    is_shown = { fia_holy_orthodox_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_orthodox_authority
+        var:fia_holy_orthodox_authority >= 25
+        NOT = { has_variable = fia_holy_orthodox_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_orthodox_call set_global_variable = { name = fia_holy_orthodox_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_orthodox_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_orthodox_call = {
+    is_shown = { fia_holy_orthodox_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_orthodox_authority
+        var:fia_holy_orthodox_authority >= 50
+        NOT = { has_variable = fia_holy_orthodox_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_orthodox_call value = 1 days = 365 } change_variable = { name = fia_holy_orthodox_authority subtract = 10 }
+        set_variable = { name = fia_holy_orthodox_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_orthodox_recognize = {
+    is_shown = { fia_holy_orthodox_voice = yes }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_orthodox_recognized_epoch } global_var:fia_holy_orthodox_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_orthodox_authority
+        var:fia_holy_orthodox_authority >= 25
+        NOT = { has_variable = fia_holy_orthodox_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_orthodox_call set_global_variable = { name = fia_holy_orthodox_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_orthodox_authority add = 5 }
+        set_variable = { name = fia_holy_orthodox_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_sunni_restraint = {
+    is_shown = { fia_holy_sunni_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_sunni_authority
+        var:fia_holy_sunni_authority >= 25
+        NOT = { has_variable = fia_holy_sunni_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_sunni_call set_global_variable = { name = fia_holy_sunni_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_sunni_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_sunni_call = {
+    is_shown = { fia_holy_sunni_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_sunni_authority
+        var:fia_holy_sunni_authority >= 50
+        NOT = { has_variable = fia_holy_sunni_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_sunni_call value = 1 days = 365 } change_variable = { name = fia_holy_sunni_authority subtract = 10 }
+        set_variable = { name = fia_holy_sunni_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_sunni_recognize = {
+    is_shown = { fia_holy_sunni_voice = yes }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_sunni_recognized_epoch } global_var:fia_holy_sunni_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_sunni_authority
+        var:fia_holy_sunni_authority >= 25
+        NOT = { has_variable = fia_holy_sunni_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_sunni_call set_global_variable = { name = fia_holy_sunni_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_sunni_authority add = 5 }
+        set_variable = { name = fia_holy_sunni_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_shiite_restraint = {
+    is_shown = { fia_holy_shiite_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_shiite_authority
+        var:fia_holy_shiite_authority >= 25
+        NOT = { has_variable = fia_holy_shiite_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_shiite_call set_global_variable = { name = fia_holy_shiite_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_shiite_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_shiite_call = {
+    is_shown = { fia_holy_shiite_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_shiite_authority
+        var:fia_holy_shiite_authority >= 50
+        NOT = { has_variable = fia_holy_shiite_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_shiite_call value = 1 days = 365 } change_variable = { name = fia_holy_shiite_authority subtract = 10 }
+        set_variable = { name = fia_holy_shiite_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_shiite_recognize = {
+    is_shown = { fia_holy_shiite_voice = yes }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_shiite_recognized_epoch } global_var:fia_holy_shiite_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_shiite_authority
+        var:fia_holy_shiite_authority >= 25
+        NOT = { has_variable = fia_holy_shiite_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_shiite_call set_global_variable = { name = fia_holy_shiite_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_shiite_authority add = 5 }
+        set_variable = { name = fia_holy_shiite_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_jewish_restraint = {
+    is_shown = { fia_holy_jewish_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_jewish_authority
+        var:fia_holy_jewish_authority >= 25
+        NOT = { has_variable = fia_holy_jewish_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_jewish_call set_global_variable = { name = fia_holy_jewish_restraint value = 1 days = 365 }
+        set_variable = { name = fia_holy_jewish_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_jewish_call = {
+    is_shown = { fia_holy_jewish_voice = yes }
+    possible = {
+        global_var:fia_holy_severity >= 1
+        has_variable = fia_holy_jewish_authority
+        var:fia_holy_jewish_authority >= 50
+        NOT = { has_variable = fia_holy_jewish_diplomacy_cooldown }
+    }
+    when_taken = {
+        set_global_variable = { name = fia_holy_jewish_call value = 1 days = 365 } change_variable = { name = fia_holy_jewish_authority subtract = 10 }
+        set_variable = { name = fia_holy_jewish_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}
+fia_holy_jewish_recognize = {
+    is_shown = { fia_holy_jewish_voice = yes }
+    possible = {
+        fia_holy_is_resolved = yes global_var:fia_holy_epoch > 0 OR = { NOT = { has_global_variable = fia_holy_jewish_recognized_epoch } global_var:fia_holy_jewish_recognized_epoch < global_var:fia_holy_epoch }
+        has_variable = fia_holy_jewish_authority
+        var:fia_holy_jewish_authority >= 25
+        NOT = { has_variable = fia_holy_jewish_diplomacy_cooldown }
+    }
+    when_taken = {
+        remove_global_variable = fia_holy_jewish_call set_global_variable = { name = fia_holy_jewish_recognized_epoch value = global_var:fia_holy_epoch } change_variable = { name = fia_holy_jewish_authority add = 5 }
+        set_variable = { name = fia_holy_jewish_diplomacy_cooldown value = 1 days = 365 }
+    }
+    ai_chance = { value = 5 }
+}

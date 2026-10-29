@@ -19,3 +19,7 @@
 
 - Wiki存档提交：`87c5e8cd9003e5c06c3b2d3ada1190b17f25c54c`。
 - 公开脚本与引擎文档摘录提交：`245f644a45f9830ada675135cff8af3b38ce2cc6`。其中 `docs/engine/triggers_summary.txt`、`effects_summary.txt`、`modifiers_summary.txt` 用来核对词汇与声明scope；这些是第三方仓库保存的生成资料，不是本次运行游戏得到的证据。
+
+### v0.2接口查阅
+
+2026-10-29通过GitHub读取同一公开项目当前的 `docs/engine/on_actions_summary.txt`、`effects_summary.txt`、`triggers_summary.txt`、`triggers_parsed.txt`。核对了全局月度pulse、state_region的state迭代、country宗教比例、宗教过滤人口效果、save_scope_value_as以及教权派类型/势力比较。没有把全国enemy_occupation误当成城市占领，因此明确使用区域代理与破坏程度。

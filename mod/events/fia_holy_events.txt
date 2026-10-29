@@ -1,0 +1,253 @@
+﻿namespace = fia
+fia.100 = {
+    type = country_event
+    placement = root
+    title = fia.100.t
+    desc = fia.100.d
+    duration = 30
+    trigger = { fia_holy_catholic_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_catholic_epoch } }
+    cancellation_trigger = { OR = { fia_holy_catholic_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_catholic_epoch } } }
+    option = {
+        name = fia.100.ignore
+        default_option = yes
+        trigger = { fia_holy_catholic_pending = yes scope:fia_holy_event_epoch = var:fia_holy_catholic_epoch }
+        set_variable = { name = fia_holy_catholic_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.100.protest
+
+        trigger = { fia_holy_catholic_pending = yes scope:fia_holy_event_epoch = var:fia_holy_catholic_epoch }
+        set_variable = { name = fia_holy_catholic_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.100.relief
+
+        trigger = { fia_holy_catholic_pending = yes scope:fia_holy_event_epoch = var:fia_holy_catholic_epoch }
+        set_variable = { name = fia_holy_catholic_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.100.pledge
+
+        trigger = { fia_holy_catholic_pending = yes scope:fia_holy_event_epoch = var:fia_holy_catholic_epoch }
+        set_variable = { name = fia_holy_catholic_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}
+fia.101 = {
+    type = country_event
+    placement = root
+    title = fia.101.t
+    desc = fia.101.d
+    duration = 30
+    trigger = { fia_holy_protestant_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_protestant_epoch } }
+    cancellation_trigger = { OR = { fia_holy_protestant_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_protestant_epoch } } }
+    option = {
+        name = fia.101.ignore
+        default_option = yes
+        trigger = { fia_holy_protestant_pending = yes scope:fia_holy_event_epoch = var:fia_holy_protestant_epoch }
+        set_variable = { name = fia_holy_protestant_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.101.protest
+
+        trigger = { fia_holy_protestant_pending = yes scope:fia_holy_event_epoch = var:fia_holy_protestant_epoch }
+        set_variable = { name = fia_holy_protestant_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.101.relief
+
+        trigger = { fia_holy_protestant_pending = yes scope:fia_holy_event_epoch = var:fia_holy_protestant_epoch }
+        set_variable = { name = fia_holy_protestant_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.101.pledge
+
+        trigger = { fia_holy_protestant_pending = yes scope:fia_holy_event_epoch = var:fia_holy_protestant_epoch }
+        set_variable = { name = fia_holy_protestant_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}
+fia.102 = {
+    type = country_event
+    placement = root
+    title = fia.102.t
+    desc = fia.102.d
+    duration = 30
+    trigger = { fia_holy_orthodox_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_orthodox_epoch } }
+    cancellation_trigger = { OR = { fia_holy_orthodox_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_orthodox_epoch } } }
+    option = {
+        name = fia.102.ignore
+        default_option = yes
+        trigger = { fia_holy_orthodox_pending = yes scope:fia_holy_event_epoch = var:fia_holy_orthodox_epoch }
+        set_variable = { name = fia_holy_orthodox_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.102.protest
+
+        trigger = { fia_holy_orthodox_pending = yes scope:fia_holy_event_epoch = var:fia_holy_orthodox_epoch }
+        set_variable = { name = fia_holy_orthodox_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.102.relief
+
+        trigger = { fia_holy_orthodox_pending = yes scope:fia_holy_event_epoch = var:fia_holy_orthodox_epoch }
+        set_variable = { name = fia_holy_orthodox_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.102.pledge
+
+        trigger = { fia_holy_orthodox_pending = yes scope:fia_holy_event_epoch = var:fia_holy_orthodox_epoch }
+        set_variable = { name = fia_holy_orthodox_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}
+fia.103 = {
+    type = country_event
+    placement = root
+    title = fia.103.t
+    desc = fia.103.d
+    duration = 30
+    trigger = { fia_holy_sunni_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_sunni_epoch } }
+    cancellation_trigger = { OR = { fia_holy_sunni_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_sunni_epoch } } }
+    option = {
+        name = fia.103.ignore
+        default_option = yes
+        trigger = { fia_holy_sunni_pending = yes scope:fia_holy_event_epoch = var:fia_holy_sunni_epoch }
+        set_variable = { name = fia_holy_sunni_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.103.protest
+
+        trigger = { fia_holy_sunni_pending = yes scope:fia_holy_event_epoch = var:fia_holy_sunni_epoch }
+        set_variable = { name = fia_holy_sunni_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.103.relief
+
+        trigger = { fia_holy_sunni_pending = yes scope:fia_holy_event_epoch = var:fia_holy_sunni_epoch }
+        set_variable = { name = fia_holy_sunni_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.103.pledge
+
+        trigger = { fia_holy_sunni_pending = yes scope:fia_holy_event_epoch = var:fia_holy_sunni_epoch }
+        set_variable = { name = fia_holy_sunni_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}
+fia.104 = {
+    type = country_event
+    placement = root
+    title = fia.104.t
+    desc = fia.104.d
+    duration = 30
+    trigger = { fia_holy_shiite_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_shiite_epoch } }
+    cancellation_trigger = { OR = { fia_holy_shiite_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_shiite_epoch } } }
+    option = {
+        name = fia.104.ignore
+        default_option = yes
+        trigger = { fia_holy_shiite_pending = yes scope:fia_holy_event_epoch = var:fia_holy_shiite_epoch }
+        set_variable = { name = fia_holy_shiite_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.104.protest
+
+        trigger = { fia_holy_shiite_pending = yes scope:fia_holy_event_epoch = var:fia_holy_shiite_epoch }
+        set_variable = { name = fia_holy_shiite_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.104.relief
+
+        trigger = { fia_holy_shiite_pending = yes scope:fia_holy_event_epoch = var:fia_holy_shiite_epoch }
+        set_variable = { name = fia_holy_shiite_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.104.pledge
+
+        trigger = { fia_holy_shiite_pending = yes scope:fia_holy_event_epoch = var:fia_holy_shiite_epoch }
+        set_variable = { name = fia_holy_shiite_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}
+fia.105 = {
+    type = country_event
+    placement = root
+    title = fia.105.t
+    desc = fia.105.d
+    duration = 30
+    trigger = { fia_holy_jewish_pending = yes }
+    immediate = { save_scope_value_as = { name = fia_holy_event_epoch value = var:fia_holy_jewish_epoch } }
+    cancellation_trigger = { OR = { fia_holy_jewish_pending = no NOT = { scope:fia_holy_event_epoch = var:fia_holy_jewish_epoch } } }
+    option = {
+        name = fia.105.ignore
+        default_option = yes
+        trigger = { fia_holy_jewish_pending = yes scope:fia_holy_event_epoch = var:fia_holy_jewish_epoch }
+        set_variable = { name = fia_holy_jewish_response value = 0 }
+
+        ai_chance = { base = 30 }
+    }
+    option = {
+        name = fia.105.protest
+
+        trigger = { fia_holy_jewish_pending = yes scope:fia_holy_event_epoch = var:fia_holy_jewish_epoch }
+        set_variable = { name = fia_holy_jewish_response value = 1 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 35 }
+    }
+    option = {
+        name = fia.105.relief
+
+        trigger = { fia_holy_jewish_pending = yes scope:fia_holy_event_epoch = var:fia_holy_jewish_epoch }
+        set_variable = { name = fia_holy_jewish_response value = 2 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 } add_modifier = { name = fia_holy_relief_funding months = 6 }
+        ai_chance = { base = 25 }
+    }
+    option = {
+        name = fia.105.pledge
+
+        trigger = { fia_holy_jewish_pending = yes scope:fia_holy_event_epoch = var:fia_holy_jewish_epoch }
+        set_variable = { name = fia_holy_jewish_response value = 3 }
+        add_modifier = { name = fia_holy_relief_cost months = 6 }
+        ai_chance = { base = 10 }
+    }
+}

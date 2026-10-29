@@ -1,0 +1,113 @@
+﻿fia_holy_is_custodian = {
+    exists = global_var:fia_holy_state
+    global_var:fia_holy_state = { owner = prev }
+}
+fia_holy_is_resolved = {
+    exists = global_var:fia_holy_state
+    global_var:fia_holy_severity <= 1
+    global_var:fia_holy_state = { NOT = { has_variable = fia_holy_restricted } }
+}
+fia_holy_catholic_affected = {
+    religion_percent_country = { target = rel:catholic value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:catholic total_size >= fia_minimum_population }
+}
+fia_holy_catholic_voice = {
+    religion = rel:catholic
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_catholic_pending = {
+    has_variable = fia_holy_catholic_age
+    has_variable = fia_holy_catholic_epoch
+    var:fia_holy_catholic_epoch = global_var:fia_holy_epoch
+}
+fia_holy_protestant_affected = {
+    religion_percent_country = { target = rel:protestant value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:protestant total_size >= fia_minimum_population }
+}
+fia_holy_protestant_voice = {
+    religion = rel:protestant
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_protestant_pending = {
+    has_variable = fia_holy_protestant_age
+    has_variable = fia_holy_protestant_epoch
+    var:fia_holy_protestant_epoch = global_var:fia_holy_epoch
+}
+fia_holy_orthodox_affected = {
+    religion_percent_country = { target = rel:orthodox value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:orthodox total_size >= fia_minimum_population }
+}
+fia_holy_orthodox_voice = {
+    religion = rel:orthodox
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_orthodox_pending = {
+    has_variable = fia_holy_orthodox_age
+    has_variable = fia_holy_orthodox_epoch
+    var:fia_holy_orthodox_epoch = global_var:fia_holy_epoch
+}
+fia_holy_sunni_affected = {
+    religion_percent_country = { target = rel:sunni value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:sunni total_size >= fia_minimum_population }
+}
+fia_holy_sunni_voice = {
+    religion = rel:sunni
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_sunni_pending = {
+    has_variable = fia_holy_sunni_age
+    has_variable = fia_holy_sunni_epoch
+    var:fia_holy_sunni_epoch = global_var:fia_holy_epoch
+}
+fia_holy_shiite_affected = {
+    religion_percent_country = { target = rel:shiite value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:shiite total_size >= fia_minimum_population }
+}
+fia_holy_shiite_voice = {
+    religion = rel:shiite
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_shiite_pending = {
+    has_variable = fia_holy_shiite_age
+    has_variable = fia_holy_shiite_epoch
+    var:fia_holy_shiite_epoch = global_var:fia_holy_epoch
+}
+fia_holy_jewish_affected = {
+    religion_percent_country = { target = rel:jewish value >= fia_holy_minimum_share }
+    any_scope_pop = { has_pop_religion = rel:jewish total_size >= fia_minimum_population }
+}
+fia_holy_jewish_voice = {
+    religion = rel:jewish
+    is_subject = no
+    OR = { has_law = law_type:law_theocracy fia_restrictive_policy = yes }
+    prestige >= 50
+    any_interest_group = { is_interest_group_type = ig_devout ig_clout >= fia_holy_devout_clout }
+}
+fia_holy_jewish_pending = {
+    has_variable = fia_holy_jewish_age
+    has_variable = fia_holy_jewish_epoch
+    var:fia_holy_jewish_epoch = global_var:fia_holy_epoch
+}
+fia_holy_has_pledge = { OR = {
+ AND = { fia_holy_catholic_pending = yes var:fia_holy_catholic_response = 3 }
+ AND = { fia_holy_protestant_pending = yes var:fia_holy_protestant_response = 3 }
+ AND = { fia_holy_orthodox_pending = yes var:fia_holy_orthodox_response = 3 }
+ AND = { fia_holy_sunni_pending = yes var:fia_holy_sunni_response = 3 }
+ AND = { fia_holy_shiite_pending = yes var:fia_holy_shiite_response = 3 }
+ AND = { fia_holy_jewish_pending = yes var:fia_holy_jewish_response = 3 }
+} }

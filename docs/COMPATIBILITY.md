@@ -24,3 +24,7 @@
 7. 革命是否继承国家任务变量，以及新国家和地区所有者变化后的清理；不能把静态 scope 测试当作革命实测。
 
 确认后按补丁记录版本、DLC、日志、存档、步骤、截图和结果。发现不兼容时增加小范围版本适配，不用复制整个原版外交文件掩盖差异。
+
+### v0.2 待验证接口
+
+全局on_monthly_pulse、STATE_PALESTINE与state迭代、country宗教人口比例、宗教过滤的add_loyalists/add_radicals、save_scope_value_as事件快照、is_interest_group_type、圣地custom目标及新日志。公开引擎摘要可核对名称，不能证明本Mod实机可运行。

@@ -1,6 +1,6 @@
 # Faith and Intervention · 信仰与干涉
 
-Victoria 3 宗教战争 Mod。首版 **v0.1.0 / experimental**：国内宗教矛盾、外国保护请求、宗教保障战争、五年履约与违约。
+Victoria 3 宗教战争 Mod。首版 **v0.2.0 / experimental**：国内宗教矛盾、外国保护请求、宗教保障战争、五年履约与违约。
 
 **目标版本：1.13 / 1.14。当前只完成脚本结构检查和离线脚本场景测试，未通过游戏本体加载、战争和存档实测。** 不宣称两个版本已经兼容。版本差异与测试清单见 [COMPATIBILITY](docs/COMPATIBILITY.md) 和 [TESTING](docs/TESTING.md)。
 
@@ -12,9 +12,18 @@ Victoria 3 宗教战争 Mod。首版 **v0.1.0 / experimental**：国内宗教矛
 4. 在外交视图选择 **“保障宗教权利 / Protect Religious Rights”**，选择日志对应地区。原版决定博弈升级、参战与和平。
 5. 战争目标执行后停止当地镇压并开始60个月保障；保护国持续承担监督成本。履约完成才获得信誉，撤销保障则重新触发危机。
 
-保障是**地方行政安排**，通过地方修正、停止镇压和受保护宗教人口的年度去激进化表示；不改变法律接纳、不改变国教、不转移领土、不立即改宗。圣地、宗教自治与强制改宗属于后续设计，尚未实现。
+保障是**地方行政安排**，通过地方修正、停止镇压和受保护宗教人口的年度去激进化表示；不改变法律接纳、不改变国教、不转移领土、不立即改宗。宗教自治、强制改宗和传教扩张仍是后续设计。
 
 目前每个国家最多承担一项对外保护承诺；每个地区最多绑定一个保护国。教派须与保护国国教完全相同。首版护教压力复用目标地区紧张度，尚无独立的教权派压力模型。
+
+## v0.2 新增：圣地与宗教外交
+
+- 耶路撒冷区域代理的控制权、礼拜限制和战争破坏危机，关联六个宗教。
+- 教宗与其他宗教的国家级权威可呼吁克制、号召护教或认可和解。
+- 各国选择抗议、救济、承诺或不介入；按实际结果定向增加对应宗教忠诚派/激进派。
+- 五年结算上限、旧事件失效检查，以及“恢复圣地通行”原生外交博弈。
+
+地图使用巴勒斯坦地区人口最多的state作代理，**不是精确的耶路撒冷省份占领检测**。影响力收益、期限、操作与边界见 [HOLY_SITES.md](docs/HOLY_SITES.md)。
 
 ## 安装
 
@@ -29,7 +38,7 @@ python3 tools/package.py --game-version 1.13
 python3 tools/package.py --game-version 1.14
 ```
 
-解压 `dist/faith-and-intervention-0.1.0-vic3-1.13.zip` 中的 `faith_and_intervention/` 与 `faith_and_intervention.mod` 到：
+解压 `dist/faith-and-intervention-0.2.0-vic3-1.13.zip` 中的 `faith_and_intervention/` 与 `faith_and_intervention.mod` 到：
 
 - Windows：`Documents/Paradox Interactive/Victoria 3/mod/`
 - macOS：`~/Documents/Paradox Interactive/Victoria 3/mod/`
@@ -46,7 +55,7 @@ Mod 在第一个月度国家 pulse 初始化。国内事项通过事件、日志
 - [docs/TESTING.md](docs/TESTING.md)：离线测试边界与实机验收步骤。
 - [docs/SOURCES.md](docs/SOURCES.md)：脚本依据及版本证据。
 - `mod/`：直接装载的游戏内容；无原版文件全量覆盖。
-- `balance.json` / `localization.json`：平衡参数与中英文本源；修改后运行 `tools/build_content.py`。
+- `balance.json` / `localization.json` / `holy_sites.json` / `tools/holy_content.py`：平衡、圣地与中英文本源；修改后运行 `tools/build_content.py`。
 - `tests/script_vm.py`：执行实际 Clausewitz AST 的有限测试解释器，**不是游戏引擎**。
 
 CI 会检查生成文件是否漂移、验证脚本结构、运行场景测试并生成两个版本标签的安装包。

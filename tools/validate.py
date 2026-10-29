@@ -19,6 +19,9 @@ def validate():
                 definitions[entry.key] = entry
         except ValueError as exc: errors.append(f'{p.relative_to(ROOT)}: {exc}')
     loc = json.loads((ROOT/'localization.json').read_text())
+    from holy_content import generate as generate_holy
+    # Read expected strings without writing runtime during validation.
+    loc.update(generate_holy(write=False))
     for key, translations in loc.items():
         if set(translations) != {'english','simp_chinese'} or not all(translations.values()):
             errors.append(f'incomplete translation: {key}')
@@ -70,8 +73,12 @@ def validate():
     # Primary interface definitions remain additive, with one namespaced child pulse.
     pulse = definitions['on_monthly_pulse_country'].value
     if [e.key for e in pulse] != ['on_actions']: errors.append('vanilla monthly pulse overwritten')
-    for e in walk(files[ROOT/'mod/common/war_goal_types/fia_war_goals.txt']):
-        if e.key in ('annex','set_state_owner','change_pop_religion','activate_law'): errors.append('unexpected coercive effect in guarantee goal')
+    for path, entries in files.items():
+        if path.parent.name == 'war_goal_types':
+            for e in walk(entries):
+                if e.key in ('annex','set_state_owner','change_pop_religion','activate_law'): errors.append(f'unexpected coercive effect in {path.name}')
+    global_pulse = definitions['on_monthly_pulse'].value
+    if [e.key for e in global_pulse] != ['on_actions']: errors.append('vanilla global monthly pulse overwritten')
     if errors: raise ValueError('\n'.join(errors))
     return f'PASS: {len(files)} script files, {len(definitions)} definitions, {len(loc)} bilingual strings; structural checks only.'
 if __name__ == '__main__':

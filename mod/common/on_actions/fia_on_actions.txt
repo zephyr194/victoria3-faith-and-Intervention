@@ -2,5 +2,8 @@
 on_monthly_pulse_country = { on_actions = { fia_monthly_pulse } }
 fia_monthly_pulse = {
     trigger = { NOT = { is_country_type = decentralized } }
-    effect = { fia_monthly_country = yes }
+    effect = { fia_monthly_country = yes fia_holy_country_tick = yes }
 }
+
+on_monthly_pulse = { on_actions = { fia_holy_global_pulse } }
+fia_holy_global_pulse = { effect = { fia_holy_global_tick = yes } }

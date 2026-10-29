@@ -13,3 +13,10 @@ fia_monitoring_cost = {
 }
 fia_host_concessions = { interest_group_ig_devout_approval_add = -2 }
 fia_diplomatic_credit = { country_prestige_add = 10 }
+
+fia_holy_relief_cost = { country_influence_add = -25 country_bureaucracy_add = -10 }
+fia_holy_relief_funding = { country_government_wages_mult = 0.02 }
+fia_holy_credibility = { country_prestige_add = 5 }
+
+fia_holy_broken_promise = { interest_group_ig_devout_approval_add = -2 }
+fia_holy_domestic_trust = { interest_group_ig_devout_approval_add = 1 }

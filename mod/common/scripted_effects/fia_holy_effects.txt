@@ -1,0 +1,715 @@
+﻿fia_holy_global_tick = {
+    s:STATE_PALESTINE = {
+        ordered_scope_state = {
+            order_by = state_population
+            max = 1
+            save_scope_as = fia_holy_sample
+        }
+    }
+    if = {
+        limit = { exists = scope:fia_holy_sample }
+        if = {
+            limit = { NOT = { has_global_variable = fia_holy_epoch } }
+            set_global_variable = { name = fia_holy_epoch value = 0 }
+            set_global_variable = { name = fia_holy_severity value = 0 }
+            set_global_variable = { name = fia_holy_owner value = scope:fia_holy_sample.owner }
+        }
+        set_global_variable = { name = fia_holy_state value = scope:fia_holy_sample }
+        set_global_variable = { name = fia_holy_previous_severity value = global_var:fia_holy_severity }
+        if = {
+            limit = { NOT = { global_var:fia_holy_owner = scope:fia_holy_sample.owner } }
+            scope:fia_holy_sample = { remove_variable = fia_holy_restricted }
+            set_global_variable = { name = fia_holy_owner value = scope:fia_holy_sample.owner }
+            set_global_variable = { name = fia_holy_transition value = 1 days = 365 }
+            change_global_variable = { name = fia_holy_epoch add = 1 }
+        }
+        set_global_variable = { name = fia_holy_severity value = 0 }
+        if = { limit = { has_global_variable = fia_holy_transition } set_global_variable = { name = fia_holy_severity value = 1 } }
+        scope:fia_holy_sample = {
+            if = {
+                limit = { OR = { has_variable = fia_holy_restricted AND = { devastation >= 0.25 owner = { is_at_war = yes } } } }
+                set_global_variable = { name = fia_holy_severity value = 2 }
+            }
+            if = { limit = { devastation >= 0.5 } set_global_variable = { name = fia_holy_severity value = 3 } }
+        }
+        if = {
+            limit = { global_var:fia_holy_severity > global_var:fia_holy_previous_severity }
+            change_global_variable = { name = fia_holy_epoch add = 1 }
+        }
+    }
+    else = {
+        remove_global_variable = fia_holy_state
+        set_global_variable = { name = fia_holy_severity value = 0 }
+    }
+}
+fia_holy_country_tick = {
+    if = {
+        limit = { has_global_variable = fia_holy_epoch exists = global_var:fia_holy_state }
+        set_variable = { name = fia_holy_severity_display value = global_var:fia_holy_severity }
+        if = { limit = { NOT = { has_journal_entry = je_fia_holy } } add_journal_entry = { type = je_fia_holy } }
+            fia_holy_catholic_tick = yes
+    fia_holy_protestant_tick = yes
+    fia_holy_orthodox_tick = yes
+    fia_holy_sunni_tick = yes
+    fia_holy_shiite_tick = yes
+    fia_holy_jewish_tick = yes
+    }
+    else = {
+            fia_holy_catholic_clear = yes
+    fia_holy_protestant_clear = yes
+    fia_holy_orthodox_clear = yes
+    fia_holy_sunni_clear = yes
+    fia_holy_shiite_clear = yes
+    fia_holy_jewish_clear = yes
+        set_variable = { name = fia_holy_severity_display value = 0 }
+    }
+}
+
+fia_holy_catholic_clear = {
+    remove_variable = fia_holy_catholic_age
+    remove_variable = fia_holy_catholic_response
+    remove_variable = fia_holy_catholic_severity
+    remove_variable = fia_holy_catholic_importance
+}
+fia_holy_catholic_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_catholic_reward_cap } }
+        add_loyalists = { religion = rel:catholic value = fia_holy_reward }
+        set_variable = { name = fia_holy_catholic_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_catholic_influence add = 5 }
+        change_variable = { name = fia_holy_catholic_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:catholic } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_catholic_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_catholic_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_catholic_response = 3 }
+            add_radicals = { religion = rel:catholic value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_catholic_influence subtract = 10 }
+            change_variable = { name = fia_holy_catholic_authority subtract = 10 }
+            if = { limit = { religion = rel:catholic } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_catholic_restraint }
+            add_radicals = { religion = rel:catholic value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_catholic_severity >= 2 has_global_variable = fia_holy_catholic_call } }
+            if = {
+                limit = { religion = rel:catholic fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:catholic value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_catholic_importance >= 85 }
+                add_radicals = { religion = rel:catholic value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:catholic value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_catholic_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:catholic value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_catholic_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_catholic_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_catholic_influence } }
+        set_variable = { name = fia_holy_catholic_influence value = 10 }
+        set_variable = { name = fia_holy_catholic_authority value = 30 }
+        set_variable = { name = fia_holy_catholic_seen value = 0 }
+        if = { limit = { this = c:PAP religion = rel:catholic } set_variable = { name = fia_holy_catholic_authority value = 60 } }
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_catholic_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_catholic_affected = yes global_var:fia_holy_epoch > var:fia_holy_catholic_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_catholic_clear = yes
+        set_variable = { name = fia_holy_catholic_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_catholic_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_catholic_age value = 0 }
+            set_variable = { name = fia_holy_catholic_response value = 0 }
+            set_variable = { name = fia_holy_catholic_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_catholic_importance value = 80 }
+            trigger_event = { id = fia.100 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_catholic_age }
+        if = {
+            limit = { fia_holy_catholic_pending = no }
+            fia_holy_catholic_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_catholic_age add = 1 }
+            if = {
+                limit = { fia_holy_catholic_affected = no }
+                fia_holy_catholic_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_catholic_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_catholic_response >= 1 } fia_holy_catholic_success = yes }
+                fia_holy_catholic_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_catholic_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_catholic_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_catholic_response = 0 var:fia_holy_catholic_response = 3 } }
+                    fia_holy_catholic_failure = yes
+                }
+                fia_holy_catholic_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_catholic_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_catholic_authority min = 0 max = 100 }
+}
+fia_holy_protestant_clear = {
+    remove_variable = fia_holy_protestant_age
+    remove_variable = fia_holy_protestant_response
+    remove_variable = fia_holy_protestant_severity
+    remove_variable = fia_holy_protestant_importance
+}
+fia_holy_protestant_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_protestant_reward_cap } }
+        add_loyalists = { religion = rel:protestant value = fia_holy_reward }
+        set_variable = { name = fia_holy_protestant_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_protestant_influence add = 5 }
+        change_variable = { name = fia_holy_protestant_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:protestant } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_protestant_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_protestant_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_protestant_response = 3 }
+            add_radicals = { religion = rel:protestant value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_protestant_influence subtract = 10 }
+            change_variable = { name = fia_holy_protestant_authority subtract = 10 }
+            if = { limit = { religion = rel:protestant } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_protestant_restraint }
+            add_radicals = { religion = rel:protestant value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_protestant_severity >= 2 has_global_variable = fia_holy_protestant_call } }
+            if = {
+                limit = { religion = rel:protestant fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:protestant value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_protestant_importance >= 85 }
+                add_radicals = { religion = rel:protestant value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:protestant value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_protestant_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:protestant value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_protestant_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_protestant_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_protestant_influence } }
+        set_variable = { name = fia_holy_protestant_influence value = 10 }
+        set_variable = { name = fia_holy_protestant_authority value = 30 }
+        set_variable = { name = fia_holy_protestant_seen value = 0 }
+
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_protestant_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_protestant_affected = yes global_var:fia_holy_epoch > var:fia_holy_protestant_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_protestant_clear = yes
+        set_variable = { name = fia_holy_protestant_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_protestant_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_protestant_age value = 0 }
+            set_variable = { name = fia_holy_protestant_response value = 0 }
+            set_variable = { name = fia_holy_protestant_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_protestant_importance value = 80 }
+            trigger_event = { id = fia.101 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_protestant_age }
+        if = {
+            limit = { fia_holy_protestant_pending = no }
+            fia_holy_protestant_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_protestant_age add = 1 }
+            if = {
+                limit = { fia_holy_protestant_affected = no }
+                fia_holy_protestant_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_protestant_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_protestant_response >= 1 } fia_holy_protestant_success = yes }
+                fia_holy_protestant_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_protestant_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_protestant_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_protestant_response = 0 var:fia_holy_protestant_response = 3 } }
+                    fia_holy_protestant_failure = yes
+                }
+                fia_holy_protestant_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_protestant_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_protestant_authority min = 0 max = 100 }
+}
+fia_holy_orthodox_clear = {
+    remove_variable = fia_holy_orthodox_age
+    remove_variable = fia_holy_orthodox_response
+    remove_variable = fia_holy_orthodox_severity
+    remove_variable = fia_holy_orthodox_importance
+}
+fia_holy_orthodox_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_orthodox_reward_cap } }
+        add_loyalists = { religion = rel:orthodox value = fia_holy_reward }
+        set_variable = { name = fia_holy_orthodox_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_orthodox_influence add = 5 }
+        change_variable = { name = fia_holy_orthodox_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:orthodox } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_orthodox_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_orthodox_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_orthodox_response = 3 }
+            add_radicals = { religion = rel:orthodox value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_orthodox_influence subtract = 10 }
+            change_variable = { name = fia_holy_orthodox_authority subtract = 10 }
+            if = { limit = { religion = rel:orthodox } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_orthodox_restraint }
+            add_radicals = { religion = rel:orthodox value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_orthodox_severity >= 2 has_global_variable = fia_holy_orthodox_call } }
+            if = {
+                limit = { religion = rel:orthodox fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:orthodox value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_orthodox_importance >= 85 }
+                add_radicals = { religion = rel:orthodox value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:orthodox value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_orthodox_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:orthodox value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_orthodox_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_orthodox_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_orthodox_influence } }
+        set_variable = { name = fia_holy_orthodox_influence value = 10 }
+        set_variable = { name = fia_holy_orthodox_authority value = 30 }
+        set_variable = { name = fia_holy_orthodox_seen value = 0 }
+
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_orthodox_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_orthodox_affected = yes global_var:fia_holy_epoch > var:fia_holy_orthodox_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_orthodox_clear = yes
+        set_variable = { name = fia_holy_orthodox_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_orthodox_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_orthodox_age value = 0 }
+            set_variable = { name = fia_holy_orthodox_response value = 0 }
+            set_variable = { name = fia_holy_orthodox_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_orthodox_importance value = 80 }
+            trigger_event = { id = fia.102 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_orthodox_age }
+        if = {
+            limit = { fia_holy_orthodox_pending = no }
+            fia_holy_orthodox_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_orthodox_age add = 1 }
+            if = {
+                limit = { fia_holy_orthodox_affected = no }
+                fia_holy_orthodox_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_orthodox_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_orthodox_response >= 1 } fia_holy_orthodox_success = yes }
+                fia_holy_orthodox_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_orthodox_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_orthodox_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_orthodox_response = 0 var:fia_holy_orthodox_response = 3 } }
+                    fia_holy_orthodox_failure = yes
+                }
+                fia_holy_orthodox_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_orthodox_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_orthodox_authority min = 0 max = 100 }
+}
+fia_holy_sunni_clear = {
+    remove_variable = fia_holy_sunni_age
+    remove_variable = fia_holy_sunni_response
+    remove_variable = fia_holy_sunni_severity
+    remove_variable = fia_holy_sunni_importance
+}
+fia_holy_sunni_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_sunni_reward_cap } }
+        add_loyalists = { religion = rel:sunni value = fia_holy_reward }
+        set_variable = { name = fia_holy_sunni_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_sunni_influence add = 5 }
+        change_variable = { name = fia_holy_sunni_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:sunni } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_sunni_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_sunni_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_sunni_response = 3 }
+            add_radicals = { religion = rel:sunni value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_sunni_influence subtract = 10 }
+            change_variable = { name = fia_holy_sunni_authority subtract = 10 }
+            if = { limit = { religion = rel:sunni } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_sunni_restraint }
+            add_radicals = { religion = rel:sunni value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_sunni_severity >= 2 has_global_variable = fia_holy_sunni_call } }
+            if = {
+                limit = { religion = rel:sunni fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:sunni value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_sunni_importance >= 85 }
+                add_radicals = { religion = rel:sunni value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:sunni value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_sunni_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:sunni value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_sunni_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_sunni_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_sunni_influence } }
+        set_variable = { name = fia_holy_sunni_influence value = 10 }
+        set_variable = { name = fia_holy_sunni_authority value = 30 }
+        set_variable = { name = fia_holy_sunni_seen value = 0 }
+
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_sunni_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_sunni_affected = yes global_var:fia_holy_epoch > var:fia_holy_sunni_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_sunni_clear = yes
+        set_variable = { name = fia_holy_sunni_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_sunni_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_sunni_age value = 0 }
+            set_variable = { name = fia_holy_sunni_response value = 0 }
+            set_variable = { name = fia_holy_sunni_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_sunni_importance value = 85 }
+            trigger_event = { id = fia.103 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_sunni_age }
+        if = {
+            limit = { fia_holy_sunni_pending = no }
+            fia_holy_sunni_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_sunni_age add = 1 }
+            if = {
+                limit = { fia_holy_sunni_affected = no }
+                fia_holy_sunni_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_sunni_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_sunni_response >= 1 } fia_holy_sunni_success = yes }
+                fia_holy_sunni_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_sunni_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_sunni_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_sunni_response = 0 var:fia_holy_sunni_response = 3 } }
+                    fia_holy_sunni_failure = yes
+                }
+                fia_holy_sunni_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_sunni_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_sunni_authority min = 0 max = 100 }
+}
+fia_holy_shiite_clear = {
+    remove_variable = fia_holy_shiite_age
+    remove_variable = fia_holy_shiite_response
+    remove_variable = fia_holy_shiite_severity
+    remove_variable = fia_holy_shiite_importance
+}
+fia_holy_shiite_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_shiite_reward_cap } }
+        add_loyalists = { religion = rel:shiite value = fia_holy_reward }
+        set_variable = { name = fia_holy_shiite_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_shiite_influence add = 5 }
+        change_variable = { name = fia_holy_shiite_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:shiite } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_shiite_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_shiite_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_shiite_response = 3 }
+            add_radicals = { religion = rel:shiite value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_shiite_influence subtract = 10 }
+            change_variable = { name = fia_holy_shiite_authority subtract = 10 }
+            if = { limit = { religion = rel:shiite } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_shiite_restraint }
+            add_radicals = { religion = rel:shiite value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_shiite_severity >= 2 has_global_variable = fia_holy_shiite_call } }
+            if = {
+                limit = { religion = rel:shiite fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:shiite value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_shiite_importance >= 85 }
+                add_radicals = { religion = rel:shiite value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:shiite value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_shiite_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:shiite value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_shiite_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_shiite_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_shiite_influence } }
+        set_variable = { name = fia_holy_shiite_influence value = 10 }
+        set_variable = { name = fia_holy_shiite_authority value = 30 }
+        set_variable = { name = fia_holy_shiite_seen value = 0 }
+
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_shiite_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_shiite_affected = yes global_var:fia_holy_epoch > var:fia_holy_shiite_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_shiite_clear = yes
+        set_variable = { name = fia_holy_shiite_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_shiite_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_shiite_age value = 0 }
+            set_variable = { name = fia_holy_shiite_response value = 0 }
+            set_variable = { name = fia_holy_shiite_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_shiite_importance value = 85 }
+            trigger_event = { id = fia.104 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_shiite_age }
+        if = {
+            limit = { fia_holy_shiite_pending = no }
+            fia_holy_shiite_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_shiite_age add = 1 }
+            if = {
+                limit = { fia_holy_shiite_affected = no }
+                fia_holy_shiite_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_shiite_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_shiite_response >= 1 } fia_holy_shiite_success = yes }
+                fia_holy_shiite_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_shiite_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_shiite_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_shiite_response = 0 var:fia_holy_shiite_response = 3 } }
+                    fia_holy_shiite_failure = yes
+                }
+                fia_holy_shiite_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_shiite_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_shiite_authority min = 0 max = 100 }
+}
+fia_holy_jewish_clear = {
+    remove_variable = fia_holy_jewish_age
+    remove_variable = fia_holy_jewish_response
+    remove_variable = fia_holy_jewish_severity
+    remove_variable = fia_holy_jewish_importance
+}
+fia_holy_jewish_success = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_jewish_reward_cap } }
+        add_loyalists = { religion = rel:jewish value = fia_holy_reward }
+        set_variable = { name = fia_holy_jewish_reward_cap value = 1 days = fia_holy_reward_cap_days }
+        change_variable = { name = fia_holy_jewish_influence add = 5 }
+        change_variable = { name = fia_holy_jewish_authority add = 5 }
+        add_modifier = { name = fia_holy_credibility months = 24 }
+        if = { limit = { religion = rel:jewish } add_modifier = { name = fia_holy_domestic_trust months = 24 } }
+    }
+}
+fia_holy_jewish_failure = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_jewish_penalty_cap } }
+        if = {
+            limit = { var:fia_holy_jewish_response = 3 }
+            add_radicals = { religion = rel:jewish value = fia_holy_broken_promise_rate }
+            change_variable = { name = fia_holy_jewish_influence subtract = 10 }
+            change_variable = { name = fia_holy_jewish_authority subtract = 10 }
+            if = { limit = { religion = rel:jewish } add_modifier = { name = fia_holy_broken_promise months = 12 } }
+        }
+        else_if = {
+            limit = { has_global_variable = fia_holy_jewish_restraint }
+            add_radicals = { religion = rel:jewish value = fia_holy_neglect_low }
+        }
+        else_if = {
+            limit = { OR = { var:fia_holy_jewish_severity >= 2 has_global_variable = fia_holy_jewish_call } }
+            if = {
+                limit = { religion = rel:jewish fia_restrictive_policy = yes }
+                add_radicals = { religion = rel:jewish value = fia_holy_national_mobilization }
+            }
+            else_if = {
+                limit = { var:fia_holy_jewish_importance >= 85 }
+                add_radicals = { religion = rel:jewish value = fia_holy_neglect_major }
+            }
+            else = { add_radicals = { religion = rel:jewish value = fia_holy_neglect_minor } }
+            change_variable = { name = fia_holy_jewish_influence subtract = 5 }
+        }
+        else = { add_radicals = { religion = rel:jewish value = fia_holy_neglect_low } }
+        set_variable = { name = fia_holy_jewish_penalty_cap value = 1 days = fia_holy_reward_cap_days }
+    }
+}
+fia_holy_jewish_tick = {
+    if = {
+        limit = { NOT = { has_variable = fia_holy_jewish_influence } }
+        set_variable = { name = fia_holy_jewish_influence value = 10 }
+        set_variable = { name = fia_holy_jewish_authority value = 30 }
+        set_variable = { name = fia_holy_jewish_seen value = 0 }
+
+    }
+    if = { limit = { is_subject = yes } change_variable = { name = fia_holy_jewish_authority subtract = 1 } }
+    if = {
+        limit = { fia_holy_jewish_affected = yes global_var:fia_holy_epoch > var:fia_holy_jewish_seen }
+        # New epochs supersede stale petitions, never score the old one as failure.
+        fia_holy_jewish_clear = yes
+        set_variable = { name = fia_holy_jewish_seen value = global_var:fia_holy_epoch }
+        if = {
+            limit = { global_var:fia_holy_severity >= 1 }
+            set_variable = { name = fia_holy_jewish_epoch value = global_var:fia_holy_epoch }
+            set_variable = { name = fia_holy_jewish_age value = 0 }
+            set_variable = { name = fia_holy_jewish_response value = 0 }
+            set_variable = { name = fia_holy_jewish_severity value = global_var:fia_holy_severity }
+            set_variable = { name = fia_holy_jewish_importance value = 100 }
+            trigger_event = { id = fia.105 popup = yes }
+        }
+    }
+    if = {
+        limit = { has_variable = fia_holy_jewish_age }
+        if = {
+            limit = { fia_holy_jewish_pending = no }
+            fia_holy_jewish_clear = yes
+        }
+        else = {
+            change_variable = { name = fia_holy_jewish_age add = 1 }
+            if = {
+                limit = { fia_holy_jewish_affected = no }
+                fia_holy_jewish_clear = yes
+            }
+            else_if = {
+                limit = { fia_holy_is_resolved = yes var:fia_holy_jewish_age >= fia_holy_settlement_delay }
+                if = { limit = { var:fia_holy_jewish_response >= 1 } fia_holy_jewish_success = yes }
+                fia_holy_jewish_clear = yes
+            }
+            else_if = {
+                limit = {
+                    var:fia_holy_jewish_age >= fia_holy_response_months
+                    OR = {
+                        var:fia_holy_jewish_age >= fia_holy_war_deadline
+                        NOT = { has_war_with = global_var:fia_holy_owner }
+                    }
+                }
+                if = {
+                    limit = { OR = { var:fia_holy_jewish_response = 0 var:fia_holy_jewish_response = 3 } }
+                    fia_holy_jewish_failure = yes
+                }
+                fia_holy_jewish_clear = yes
+            }
+        }
+    }
+    clamp_variable = { name = fia_holy_jewish_influence min = 0 max = 100 }
+    clamp_variable = { name = fia_holy_jewish_authority min = 0 max = 100 }
+}

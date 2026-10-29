@@ -20,5 +20,17 @@
   "fatigue_decay": 2,
   "minimum_patron_prestige": 50,
   "war_goal_infamy": 5,
-  "war_goal_maneuvers": 20
+  "war_goal_maneuvers": 20,
+  "holy_minimum_share": 0.01,
+  "holy_reward": 0.005,
+  "holy_neglect_major": 0.01,
+  "holy_neglect_minor": 0.0075,
+  "holy_neglect_low": 0.0025,
+  "holy_national_mobilization": 0.015,
+  "holy_response_months": 6,
+  "holy_war_deadline": 24,
+  "holy_settlement_delay": 3,
+  "holy_reward_cap_days": 1825,
+  "holy_devout_clout": 0.2,
+  "holy_broken_promise_rate": 0.02
 }

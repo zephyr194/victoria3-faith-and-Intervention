@@ -14,6 +14,7 @@ class PackageTests(unittest.TestCase):
                 self.assertFalse(any('/.git/' in name or '__pycache__' in name for name in names))
                 self.assertIn('faith_and_intervention/events/fia_events.txt',names)
                 self.assertIn('faith_and_intervention_docs/DESIGN.md',names)
+                self.assertIn('faith_and_intervention_docs/docs/HOLY_SITES.md',names)
                 descriptor=archive.read('faith_and_intervention.mod').decode()
                 self.assertIn('path="mod/faith_and_intervention"',descriptor)
                 self.assertIn(f'supported_version="{version}.*"',descriptor)

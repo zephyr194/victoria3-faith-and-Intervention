@@ -1,0 +1,12 @@
+{
+  "site": "jerusalem",
+  "state_region": "STATE_PALESTINE",
+  "faiths": [
+    {"key":"catholic","zh":"天主教","en":"Catholic","importance":80},
+    {"key":"protestant","zh":"新教","en":"Protestant","importance":80},
+    {"key":"orthodox","zh":"东正教","en":"Orthodox","importance":80},
+    {"key":"sunni","zh":"逊尼派","en":"Sunni","importance":85},
+    {"key":"shiite","zh":"什叶派","en":"Shia","importance":85},
+    {"key":"jewish","zh":"犹太教","en":"Jewish","importance":100}
+  ]
+}

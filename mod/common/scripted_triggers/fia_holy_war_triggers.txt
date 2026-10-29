@@ -1,0 +1,10 @@
+fia_holy_war_possible = {
+    global_var:fia_holy_severity >= 2
+    exists = global_var:fia_holy_state
+    is_subject = no
+    is_at_war = no
+    NOT = { this = global_var:fia_holy_state.owner }
+    has_interest_marker_in_region = global_var:fia_holy_state.region
+    fia_holy_has_pledge = yes
+    scope:target_country = global_var:fia_holy_state.owner
+}

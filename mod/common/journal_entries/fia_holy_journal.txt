@@ -1,0 +1,8 @@
+﻿je_fia_holy = {
+    icon = "gfx/interface/icons/event_icons/event_default.dds"
+    weight = 80
+    transferable = no
+    can_revolution_inherit = yes
+    status_desc = je_fia_holy_status
+    complete = { always = no }
+}

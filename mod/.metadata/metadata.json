@@ -1,10 +1,16 @@
 {
   "name": "Faith and Intervention",
   "id": "",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "supported_game_version": "1.13.*",
-  "short_description": "Religious crises, protection requests, intervention wars and five-year local guarantees. Experimental support for 1.13 and 1.14; see README.",
-  "tags": ["Gameplay", "Diplomacy", "Journal Entries"],
+  "short_description": "Religious intervention, Jerusalem crises, religious diplomacy and faith-filtered political responses. Experimental 1.13/1.14 support.",
+  "tags": [
+    "Gameplay",
+    "Diplomacy",
+    "Journal Entries"
+  ],
   "relationships": [],
-  "game_custom_data": {"multiplayer_synchronized": true}
+  "game_custom_data": {
+    "multiplayer_synchronized": true
+  }
 }

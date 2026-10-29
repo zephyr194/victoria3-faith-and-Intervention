@@ -56,3 +56,9 @@
 ## 兼容边界
 
 没有新增游戏可执行代码、外部联网依赖或原版文件全量覆盖。Python仅用于生成、检查与打包，不参与游戏运行。存在 `kind = custom` 和动态 religion/state scope 等需实机确认的接口；详见 COMPATIBILITY。
+
+## v0.2 圣地状态机
+
+新增全局 `fia_holy_global_pulse`，每月采样一次区域代理；国家pulse调用 `fia_holy_country_tick`。全局存储state、owner、severity、epoch；各国各宗教分开维护seen/epoch/age/response、护教影响力、权威及五年奖惩限额。事件epoch使用 `save_scope_value_as` 保存在各自事件链，不能用国家共享变量替代。
+
+`tools/holy_content.py`生成运行文件和本地化。修改该生成器、圣地配置或平衡参数后运行build_content；CI检查整个mod目录的生成漂移。详细契约见HOLY_SITES。

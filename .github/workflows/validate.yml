@@ -15,7 +15,7 @@ jobs:
       - name: Regenerate and detect drift
         run: |
           python tools/build_content.py
-          git diff --exit-code -- mod/common/script_values/fia_parameters.txt mod/localization
+          git diff --exit-code -- mod
       - name: Validate and test scripts
         run: |
           python tools/validate.py

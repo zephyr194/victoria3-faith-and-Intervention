@@ -1,0 +1,14 @@
+dp_fia_holy_access = {
+    requires_interest_marker = yes
+    war_goal = fia_holy_access
+    texture = "gfx/interface/icons/war_goals/humiliation.dds"
+    possible = {
+        aggressive_diplomatic_plays_permitted = yes
+        diplomatic_play_has_no_relations_blockers = yes
+        fia_holy_war_possible = yes
+    }
+    ai_acceptance_max = 90
+    on_weekly_pulse = { }
+    on_war_begins = { }
+    on_war_end = { }
+}

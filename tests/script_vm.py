@@ -19,11 +19,12 @@ class Obj:
     states: list = field(default_factory=list)
     pops: list = field(default_factory=list)
     journals: set = field(default_factory=set)
+    groups: list = field(default_factory=list)
 
 class VM:
     def __init__(self, root, countries=()):
         self.root=root;self.stack=[root];self.scopes={};self.countries=list(countries)
-        self.events=[];self.radicals=[]
+        self.events=[];self.radicals=[];self.loyalists=[];self.globals={};self.objects={}
         self.defs={}
         for p in (ROOT/'mod').rglob('*.txt'):
             for e in parse(p.read_text(encoding='utf-8-sig')):
@@ -43,6 +44,8 @@ class VM:
         if token=='root': result=self.root
         elif token=='prev': result=self.stack[-2]
         elif token=='this': result=self.cur
+        elif token.startswith('global_var:'): result=self.globals.get(token[11:])
+        elif token.startswith(('s:','c:')): result=self.objects.get(token)
         elif token.startswith('scope:'): result=self.scopes.get(token[6:])
         elif token.startswith('var:'): result=self.cur.vars.get(token[4:])
         elif token in self.cur.attrs: result=self.cur.attrs[token]
@@ -73,6 +76,10 @@ class VM:
         if k=='always': return self.resolve(v)
         if k=='exists':
             x=self.resolve(v);return isinstance(x,Obj) and x.attrs.get('is_country_alive',True)
+        if k=='has_global_variable': return v in self.globals
+        if k=='religion_percent_country':
+            test=next(x for x in v if x.key=='value')
+            return self.compare(self.cur.attrs.get('shares',{}).get(self.resolve(get(v,'target')),0),test.op,self.resolve(test.value))
         if k=='has_variable': return v in self.cur.vars
         if k=='has_journal_entry': return v in self.cur.journals
         if k=='has_pop_religion': return self.cur.attrs.get('religion')==self.resolve(v)
@@ -85,12 +92,14 @@ class VM:
             share=self.cur.attrs.get('shares',{}).get(self.resolve(get(v,'target')),0)
             test=next(x for x in v if x.key=='value')
             return self.compare(share,test.op,self.resolve(test.value))
+        if k=='any_interest_group':return any(self.scoped(x,self.condition,v) for x in self.cur.groups)
+        if k=='is_interest_group_type':return self.cur.attrs.get('group_type')==v
         if k=='any_scope_pop': return any(self.scoped(x,self.condition,v) for x in self.cur.pops)
         if k=='any_scope_state': return any(self.scoped(x,self.condition,v) for x in self.cur.states)
         if k=='any_diplomatic_play': return False  # integration-tested in game, never fabricated
         if isinstance(v,list): return self.scoped(self.resolve(k),self.condition,v)
-        known={'religion','owner','this','root','prev','prestige','is_country_alive','is_subject','is_at_war','has_state_religion','pop_acceptance','total_size','turmoil','standard_of_living','state_population'}
-        if k not in known and not k.startswith('var:'): raise AssertionError(f'Unsupported test trigger: {k}')
+        known={'religion','owner','this','root','prev','prestige','is_country_alive','is_subject','is_at_war','has_state_religion','pop_acceptance','total_size','turmoil','standard_of_living','state_population','devastation','ig_clout'}
+        if k not in known and not k.startswith(('var:','global_var:','scope:')): raise AssertionError(f'Unsupported test trigger: {k}')
         return self.compare(self.resolve(k),e.op,self.resolve(v))
     def effect(self,entries):
         branch=False
@@ -104,6 +113,10 @@ class VM:
             branch=False
             if k in self.defs and k.startswith('fia_'):
                 self.effect(self.defs[k]);continue
+            if k=='set_global_variable':self.globals[get(v,'name')]=self.resolve(get(v,'value',1));continue
+            if k=='remove_global_variable':self.globals.pop(v,None);continue
+            if k=='change_global_variable':
+                key=get(v,'name');self.globals[key]+=self.resolve(get(v,'add'));continue
             if k=='set_variable': self.cur.vars[get(v,'name')]=self.resolve(get(v,'value',1));continue
             if k=='remove_variable': self.cur.vars.pop(v,None);continue
             if k=='change_variable':
@@ -117,12 +130,15 @@ class VM:
                 self.cur.vars[key]=a;continue
             if k=='clamp_variable':
                 key=get(v,'name');self.cur.vars[key]=max(self.resolve(get(v,'min')),min(self.resolve(get(v,'max')),self.cur.vars[key]));continue
+            if k=='save_scope_value_as':self.scopes[get(v,'name')]=self.resolve(get(v,'value'));continue
             if k=='save_scope_as':self.scopes[v]=self.cur;continue
             if k=='add_modifier':self.cur.modifiers.add(get(v,'name'));continue
             if k=='remove_modifier':self.cur.modifiers.discard(v);continue
             if k=='add_journal_entry':self.cur.journals.add(get(v,'type'));continue
             if k=='trigger_event':self.events.append((self.cur,get(v,'id')));continue
-            if k=='add_radicals_in_state':self.radicals.append((self.cur,self.resolve(get(v,'religion')),float(get(v,'value'))));continue
+            if k=='add_radicals':self.radicals.append((self.cur,self.resolve(get(v,'religion')),float(self.resolve(get(v,'value')))));continue
+            if k=='add_loyalists':self.loyalists.append((self.cur,self.resolve(get(v,'religion')),float(self.resolve(get(v,'value')))));continue
+            if k=='add_radicals_in_state':self.radicals.append((self.cur,self.resolve(get(v,'religion')),float(self.resolve(get(v,'value')))));continue
             if k=='every_scope_state':
                 for state in self.cur.states:
                     if self.scoped(state,self.condition,get(v,'limit',[])):
